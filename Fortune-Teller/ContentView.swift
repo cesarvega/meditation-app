@@ -11,6 +11,8 @@ import SwiftData
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var items: [Item]
+    @State private var languageManager = LanguageManager()
+    @State private var showLanguagePicker = false
 
     var body: some View {
         NavigationSplitView {
@@ -40,26 +42,29 @@ struct ContentView: View {
             .toolbar {
                 ToolbarItem(placement: .principal) {
                     VStack {
-                        Text("Welcome,")
+                        Text(languageManager.localizedString(.welcome))
                             .font(.title2)
                             .foregroundColor(.white)
-                        Text("Jack Grealish")
+                        Text(languageManager.localizedString(.userName))
                             .font(.title)
                             .fontWeight(.bold)
                             .foregroundColor(.white)
                     }
+                    .padding(.top, 30)
                 }
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(action: addItem) {
-                        Label("Add Item", systemImage: "plus")
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button(action: {
+                        showLanguagePicker = true
+                    }) {
+                        Image(systemName: "globe")
+                            .foregroundColor(.white)
                     }
-                    .foregroundColor(.white)
                 }
             }
             .toolbarBackground(.clear, for: .navigationBar)
             .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
         } detail: {
-            Text("Select an item")
+            Text(languageManager.localizedString(.selectItem))
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .background(
                     Image("BackgroundImage")
@@ -78,12 +83,8 @@ struct ContentView: View {
                 .clipped()
                 .ignoresSafeArea(.all)
         )
-    }
-
-    private func addItem() {
-        withAnimation {
-            let newItem = Item(timestamp: Date())
-            modelContext.insert(newItem)
+        .sheet(isPresented: $showLanguagePicker) {
+            LanguagePickerView(languageManager: languageManager)
         }
     }
 
