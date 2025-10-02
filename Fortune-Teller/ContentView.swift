@@ -9,24 +9,19 @@ import SwiftUI
 import SwiftData
 
 struct ContentView: View {
-    @Environment(\.modelContext) private var modelContext
-    @Query private var items: [Item]
     @State private var languageManager = LanguageManager()
     @State private var showLanguagePicker = false
 
     var body: some View {
-        NavigationSplitView {
-            List {
-                ForEach(items) { item in
-                    NavigationLink {
-                        Text("Item at \(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))")
-                            .background(Color.clear)
-                    } label: {
-                        Text(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))
+        NavigationStack {
+            ScrollView {
+                VStack(spacing: 16) {
+                    ForEach(Category.allCategories) { category in
+                        CategoryCard(category: category, languageManager: languageManager)
                     }
                 }
-                .onDelete(perform: deleteItems)
-                .listRowBackground(Color.clear)
+                .padding(.top, 20)
+                .padding(.bottom, 40)
             }
             .scrollContentBackground(.hidden)
             .background(
@@ -63,41 +58,15 @@ struct ContentView: View {
             }
             .toolbarBackground(.clear, for: .navigationBar)
             .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
-        } detail: {
-            Text(languageManager.localizedString(.selectItem))
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .background(
-                    Image("BackgroundImage")
-                        .resizable()
-                        .scaledToFill()
-                        .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
-                        .clipped()
-                        .ignoresSafeArea(.all)
-                )
-        }
-        .background(
-            Image("BackgroundImage")
-                .resizable()
-                .scaledToFill()
-                .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
-                .clipped()
-                .ignoresSafeArea(.all)
-        )
-        .sheet(isPresented: $showLanguagePicker) {
-            LanguagePickerView(languageManager: languageManager)
-        }
-    }
-
-    private func deleteItems(offsets: IndexSet) {
-        withAnimation {
-            for index in offsets {
-                modelContext.delete(items[index])
+            .sheet(isPresented: $showLanguagePicker) {
+                LanguagePickerView(languageManager: languageManager)
             }
         }
     }
 }
 
-#Preview {
-    ContentView()
-        .modelContainer(for: Item.self, inMemory: true)
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        ContentView()
+    }
 }

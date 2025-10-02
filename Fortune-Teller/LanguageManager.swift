@@ -59,19 +59,43 @@ class LanguageManager {
 enum LocalizationKey {
     case welcome
     case userName
-    case addItem
-    case selectItem
     case language
     case chooseLanguage
+    
+    // Category names
+    case categorySleep
+    case categoryStressRelief
+    case categoryAnxiety
+    case categoryFocus
+    case categoryGratitude
+    
+    // Category descriptions
+    case descSleep
+    case descStressRelief
+    case descAnxiety
+    case descFocus
+    case descGratitude
     
     var english: String {
         switch self {
         case .welcome: return "Welcome,"
         case .userName: return "Jack Grealish"
-        case .addItem: return "Add Item"
-        case .selectItem: return "Select an item"
         case .language: return "Language"
         case .chooseLanguage: return "Choose Language"
+        
+        // Categories
+        case .categorySleep: return "Sleep"
+        case .categoryStressRelief: return "Stress Relief"
+        case .categoryAnxiety: return "Anxiety"
+        case .categoryFocus: return "Focus"
+        case .categoryGratitude: return "Gratitude"
+        
+        // Descriptions
+        case .descSleep: return "To help you relax and go to sleep"
+        case .descStressRelief: return "Techniques to reduce your daily stress"
+        case .descAnxiety: return "Calming exercises for peace of mind"
+        case .descFocus: return "Improve concentration and mental clarity"
+        case .descGratitude: return "Practice mindfulness and appreciation"
         }
     }
     
@@ -79,10 +103,22 @@ enum LocalizationKey {
         switch self {
         case .welcome: return "Bienvenido,"
         case .userName: return "Jack Grealish"
-        case .addItem: return "Agregar"
-        case .selectItem: return "Selecciona un elemento"
         case .language: return "Idioma"
         case .chooseLanguage: return "Elegir Idioma"
+        
+        // Categories
+        case .categorySleep: return "Dormir"
+        case .categoryStressRelief: return "Alivio del Estrés"
+        case .categoryAnxiety: return "Ansiedad"
+        case .categoryFocus: return "Enfoque"
+        case .categoryGratitude: return "Gratitud"
+        
+        // Descriptions
+        case .descSleep: return "Para ayudarte a relajarte y dormir"
+        case .descStressRelief: return "Técnicas para reducir el estrés diario"
+        case .descAnxiety: return "Ejercicios calmantes para la paz mental"
+        case .descFocus: return "Mejora la concentración y claridad mental"
+        case .descGratitude: return "Practica la atención plena y el agradecimiento"
         }
     }
 }

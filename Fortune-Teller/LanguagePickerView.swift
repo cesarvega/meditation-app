@@ -52,6 +52,8 @@ struct LanguagePickerView: View {
     }
 }
 
-#Preview {
-    LanguagePickerView(languageManager: LanguageManager())
+struct LanguagePickerView_Previews: PreviewProvider {
+    static var previews: some View {
+        LanguagePickerView(languageManager: LanguageManager())
+    }
 }
