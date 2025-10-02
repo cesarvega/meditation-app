@@ -18,25 +18,66 @@ struct ContentView: View {
                 ForEach(items) { item in
                     NavigationLink {
                         Text("Item at \(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))")
+                            .background(Color.clear)
                     } label: {
                         Text(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))
                     }
                 }
                 .onDelete(perform: deleteItems)
+                .listRowBackground(Color.clear)
             }
+            .scrollContentBackground(.hidden)
+            .background(
+                Image("BackgroundImage")
+                    .resizable()
+                    .scaledToFill()
+                    .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
+                    .clipped()
+                    .ignoresSafeArea(.all)
+            )
+            .navigationTitle("")
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    EditButton()
+                ToolbarItem(placement: .principal) {
+                    VStack {
+                        Text("Welcome,")
+                            .font(.title2)
+                            .foregroundColor(.white)
+                        Text("Jack Grealish")
+                            .font(.title)
+                            .fontWeight(.bold)
+                            .foregroundColor(.white)
+                    }
                 }
-                ToolbarItem {
+                ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: addItem) {
                         Label("Add Item", systemImage: "plus")
                     }
+                    .foregroundColor(.white)
                 }
             }
+            .toolbarBackground(.clear, for: .navigationBar)
+            .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
         } detail: {
             Text("Select an item")
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .background(
+                    Image("BackgroundImage")
+                        .resizable()
+                        .scaledToFill()
+                        .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
+                        .clipped()
+                        .ignoresSafeArea(.all)
+                )
         }
+        .background(
+            Image("BackgroundImage")
+                .resizable()
+                .scaledToFill()
+                .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
+                .clipped()
+                .ignoresSafeArea(.all)
+        )
     }
 
     private func addItem() {
