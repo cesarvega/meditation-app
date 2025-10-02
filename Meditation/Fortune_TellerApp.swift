@@ -1,6 +1,6 @@
 //
-//  Fortune_TellerApp.swift
-//  Fortune-Teller
+//  MeditationApp.swift
+//  Meditation
 //
 //  Created by Cesar Vega on 9/23/25.
 //
@@ -8,7 +8,7 @@
 import SwiftUI
 
 @main
-struct Fortune_TellerApp: App {
+struct MeditationApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()

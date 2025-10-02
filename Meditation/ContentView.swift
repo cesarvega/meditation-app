@@ -1,6 +1,6 @@
 //
 //  ContentView.swift
-//  Fortune-Teller
+//  Meditation
 //
 //  Created by Cesar Vega on 9/23/25.
 //

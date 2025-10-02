@@ -1,6 +1,6 @@
 //
 //  CategoryCard.swift
-//  Fortune-Teller
+//  Meditation
 //
 //  Created by Cesar Vega on 10/2/25.
 //

@@ -1,13 +1,13 @@
-# Fortune-Teller iOS App - AI Agent Instructions
+# Meditation iOS App - AI Agent Instructions
 
 ## Project Overview
-This is a SwiftUI-based iOS application that appears to be a fortune-telling app. The project uses modern iOS development patterns with SwiftData for persistence and follows Apple's latest architectural recommendations.
+This is a SwiftUI-based iOS meditation application. The project uses modern iOS development patterns with local data models and follows Apple's latest architectural recommendations.
 
 ## Architecture & Key Patterns
 
 ### SwiftData Integration
 - **Model Layer**: `Item.swift` defines the core data model using `@Model` macro
-- **Persistence**: App uses SwiftData with `ModelContainer` configured in `Fortune_TellerApp.swift`
+- **Persistence**: App uses SwiftData with `ModelContainer` configured in `MeditationApp.swift`
 - **Data Access**: Views use `@Environment(\.modelContext)` and `@Query` for data operations
 - **Pattern**: All data operations should use `modelContext.insert()` and `modelContext.delete()` with `withAnimation` blocks
 
@@ -28,7 +28,7 @@ private func addItem() {
 - **State Management**: Relies on SwiftData's reactive updates via `@Query`
 
 ## File Structure & Responsibilities
-- `Fortune_TellerApp.swift`: App entry point with ModelContainer configuration
+- `MeditationApp.swift`: App entry point with ModelContainer configuration
 - `ContentView.swift`: Main interface with list/detail navigation pattern
 - `Item.swift`: Core data model (currently placeholder with timestamp)
 - `Assets.xcassets/`: Standard iOS asset catalog for icons, colors, images
@@ -50,7 +50,7 @@ This appears to be part of a larger Xcode workspace/project located outside the 
 ### Data Model Expansion
 When adding new fortune-telling features:
 - Extend `Item.swift` or create new `@Model` classes
-- Update the Schema in `Fortune_TellerApp.swift` to include new models
+- Update the Schema in `MeditationApp.swift` to include new models
 - Use proper SwiftData relationships (`@Relationship`) for complex data
 
 ### UI Development
@@ -64,7 +64,7 @@ When adding new fortune-telling features:
 - Use in-memory containers for previews to avoid affecting real data
 
 ## Project-Specific Conventions
-- File naming uses underscores for app files (`Fortune_TellerApp.swift`)
+- File naming uses underscores for app files (`MeditationApp.swift`)
 - All files include standard Apple file headers with creation date
 - Data operations always wrapped in animations for smooth UX
 - Uses `final class` for `@Model` objects following SwiftData best practices

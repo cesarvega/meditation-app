@@ -24,25 +24,25 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		C01FA37D2E8362F200B35F36 /* Fortune-Teller.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Fortune-Teller.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		C01FA38C2E8362F400B35F36 /* Fortune-TellerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Fortune-TellerTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		C01FA3962E8362F400B35F36 /* Fortune-TellerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Fortune-TellerUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		C01FA37D2E8362F200B35F36 /* Meditation.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Meditation.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C01FA38C2E8362F400B35F36 /* MeditationTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MeditationTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		C01FA3962E8362F400B35F36 /* MeditationUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MeditationUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		C01FA37F2E8362F200B35F36 /* Fortune-Teller */ = {
+		C01FA37F2E8362F200B35F36 /* Meditation */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = "Fortune-Teller";
+			path = Meditation;
 			sourceTree = "<group>";
 		};
-		C01FA38F2E8362F400B35F36 /* Fortune-TellerTests */ = {
+		C01FA38F2E8362F400B35F36 /* MeditationTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = "Fortune-TellerTests";
+			path = MeditationTests;
 			sourceTree = "<group>";
 		};
-		C01FA3992E8362F400B35F36 /* Fortune-TellerUITests */ = {
+		C01FA3992E8362F400B35F36 /* MeditationUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = "Fortune-TellerUITests";
+			path = MeditationUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -75,9 +75,9 @@
 		C01FA3742E8362F200B35F36 = {
 			isa = PBXGroup;
 			children = (
-				C01FA37F2E8362F200B35F36 /* Fortune-Teller */,
-				C01FA38F2E8362F400B35F36 /* Fortune-TellerTests */,
-				C01FA3992E8362F400B35F36 /* Fortune-TellerUITests */,
+				C01FA37F2E8362F200B35F36 /* Meditation */,
+				C01FA38F2E8362F400B35F36 /* MeditationTests */,
+				C01FA3992E8362F400B35F36 /* MeditationUITests */,
 				C01FA37E2E8362F200B35F36 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -85,9 +85,9 @@
 		C01FA37E2E8362F200B35F36 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				C01FA37D2E8362F200B35F36 /* Fortune-Teller.app */,
-				C01FA38C2E8362F400B35F36 /* Fortune-TellerTests.xctest */,
-				C01FA3962E8362F400B35F36 /* Fortune-TellerUITests.xctest */,
+				C01FA37D2E8362F200B35F36 /* Meditation.app */,
+				C01FA38C2E8362F400B35F36 /* MeditationTests.xctest */,
+				C01FA3962E8362F400B35F36 /* MeditationUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -95,9 +95,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		C01FA37C2E8362F200B35F36 /* Fortune-Teller */ = {
+		C01FA37C2E8362F200B35F36 /* Meditation */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = C01FA3A02E8362F400B35F36 /* Build configuration list for PBXNativeTarget "Fortune-Teller" */;
+			buildConfigurationList = C01FA3A02E8362F400B35F36 /* Build configuration list for PBXNativeTarget "Meditation" */;
 			buildPhases = (
 				C01FA3792E8362F200B35F36 /* Sources */,
 				C01FA37A2E8362F200B35F36 /* Frameworks */,
@@ -108,18 +108,18 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				C01FA37F2E8362F200B35F36 /* Fortune-Teller */,
+				C01FA37F2E8362F200B35F36 /* Meditation */,
 			);
-			name = "Fortune-Teller";
+			name = Meditation;
 			packageProductDependencies = (
 			);
 			productName = "Fortune-Teller";
-			productReference = C01FA37D2E8362F200B35F36 /* Fortune-Teller.app */;
+			productReference = C01FA37D2E8362F200B35F36 /* Meditation.app */;
 			productType = "com.apple.product-type.application";
 		};
-		C01FA38B2E8362F400B35F36 /* Fortune-TellerTests */ = {
+		C01FA38B2E8362F400B35F36 /* MeditationTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = C01FA3A32E8362F400B35F36 /* Build configuration list for PBXNativeTarget "Fortune-TellerTests" */;
+			buildConfigurationList = C01FA3A32E8362F400B35F36 /* Build configuration list for PBXNativeTarget "MeditationTests" */;
 			buildPhases = (
 				C01FA3882E8362F400B35F36 /* Sources */,
 				C01FA3892E8362F400B35F36 /* Frameworks */,
@@ -131,18 +131,18 @@
 				C01FA38E2E8362F400B35F36 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				C01FA38F2E8362F400B35F36 /* Fortune-TellerTests */,
+				C01FA38F2E8362F400B35F36 /* MeditationTests */,
 			);
-			name = "Fortune-TellerTests";
+			name = MeditationTests;
 			packageProductDependencies = (
 			);
 			productName = "Fortune-TellerTests";
-			productReference = C01FA38C2E8362F400B35F36 /* Fortune-TellerTests.xctest */;
+			productReference = C01FA38C2E8362F400B35F36 /* MeditationTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		C01FA3952E8362F400B35F36 /* Fortune-TellerUITests */ = {
+		C01FA3952E8362F400B35F36 /* MeditationUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = C01FA3A62E8362F400B35F36 /* Build configuration list for PBXNativeTarget "Fortune-TellerUITests" */;
+			buildConfigurationList = C01FA3A62E8362F400B35F36 /* Build configuration list for PBXNativeTarget "MeditationUITests" */;
 			buildPhases = (
 				C01FA3922E8362F400B35F36 /* Sources */,
 				C01FA3932E8362F400B35F36 /* Frameworks */,
@@ -154,13 +154,13 @@
 				C01FA3982E8362F400B35F36 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				C01FA3992E8362F400B35F36 /* Fortune-TellerUITests */,
+				C01FA3992E8362F400B35F36 /* MeditationUITests */,
 			);
-			name = "Fortune-TellerUITests";
+			name = MeditationUITests;
 			packageProductDependencies = (
 			);
 			productName = "Fortune-TellerUITests";
-			productReference = C01FA3962E8362F400B35F36 /* Fortune-TellerUITests.xctest */;
+			productReference = C01FA3962E8362F400B35F36 /* MeditationUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -186,7 +186,7 @@
 					};
 				};
 			};
-			buildConfigurationList = C01FA3782E8362F200B35F36 /* Build configuration list for PBXProject "Fortune-Teller" */;
+			buildConfigurationList = C01FA3782E8362F200B35F36 /* Build configuration list for PBXProject "Meditation" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -200,9 +200,9 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				C01FA37C2E8362F200B35F36 /* Fortune-Teller */,
-				C01FA38B2E8362F400B35F36 /* Fortune-TellerTests */,
-				C01FA3952E8362F400B35F36 /* Fortune-TellerUITests */,
+				C01FA37C2E8362F200B35F36 /* Meditation */,
+				C01FA38B2E8362F400B35F36 /* MeditationTests */,
+				C01FA3952E8362F400B35F36 /* MeditationUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -258,12 +258,12 @@
 /* Begin PBXTargetDependency section */
 		C01FA38E2E8362F400B35F36 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = C01FA37C2E8362F200B35F36 /* Fortune-Teller */;
+			target = C01FA37C2E8362F200B35F36 /* Meditation */;
 			targetProxy = C01FA38D2E8362F400B35F36 /* PBXContainerItemProxy */;
 		};
 		C01FA3982E8362F400B35F36 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = C01FA37C2E8362F200B35F36 /* Fortune-Teller */;
+			target = C01FA37C2E8362F200B35F36 /* Meditation */;
 			targetProxy = C01FA3972E8362F400B35F36 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -521,7 +521,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		C01FA3782E8362F200B35F36 /* Build configuration list for PBXProject "Fortune-Teller" */ = {
+		C01FA3782E8362F200B35F36 /* Build configuration list for PBXProject "Meditation" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C01FA39E2E8362F400B35F36 /* Debug */,
@@ -530,7 +530,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		C01FA3A02E8362F400B35F36 /* Build configuration list for PBXNativeTarget "Fortune-Teller" */ = {
+		C01FA3A02E8362F400B35F36 /* Build configuration list for PBXNativeTarget "Meditation" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C01FA3A12E8362F400B35F36 /* Debug */,
@@ -539,7 +539,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		C01FA3A32E8362F400B35F36 /* Build configuration list for PBXNativeTarget "Fortune-TellerTests" */ = {
+		C01FA3A32E8362F400B35F36 /* Build configuration list for PBXNativeTarget "MeditationTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C01FA3A42E8362F400B35F36 /* Debug */,
@@ -548,7 +548,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		C01FA3A62E8362F400B35F36 /* Build configuration list for PBXNativeTarget "Fortune-TellerUITests" */ = {
+		C01FA3A62E8362F400B35F36 /* Build configuration list for PBXNativeTarget "MeditationUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C01FA3A72E8362F400B35F36 /* Debug */,
