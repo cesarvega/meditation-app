@@ -22,7 +22,9 @@ struct CategoryCard: View {
                     
                     Text(category.name(languageManager: languageManager))
                         .font(.headline)
-                        .foregroundColor(category.color)
+                        .foregroundColor(.white)
+                        .lineLimit(2)
+                        .fixedSize(horizontal: false, vertical: true)
                 }
                 
                 Spacer()
@@ -77,6 +79,7 @@ struct CategoryCard: View {
                 .fill(Color(.systemBackground))
                 .shadow(color: Color.black.opacity(0.08), radius: 10, x: 0, y: 4)
         )
+        .opacity(0.8)
         .padding(.horizontal, 16)
     }
 }

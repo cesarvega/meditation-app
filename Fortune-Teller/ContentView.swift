@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import SwiftData
 
 struct ContentView: View {
     @State private var languageManager = LanguageManager()
@@ -17,7 +16,10 @@ struct ContentView: View {
             ScrollView {
                 VStack(spacing: 16) {
                     ForEach(Category.allCategories) { category in
-                        CategoryCard(category: category, languageManager: languageManager)
+                        NavigationLink(destination: CategoryDetailView(category: category, languageManager: languageManager)) {
+                            CategoryCard(category: category, languageManager: languageManager)
+                        }
+                        .buttonStyle(PlainButtonStyle())
                     }
                 }
                 .padding(.top, 20)
@@ -36,14 +38,18 @@ struct ContentView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .principal) {
-                    VStack {
+                    VStack(spacing: 2) {
                         Text(languageManager.localizedString(.welcome))
                             .font(.title2)
                             .foregroundColor(.white)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.5)
                         Text(languageManager.localizedString(.userName))
                             .font(.title)
                             .fontWeight(.bold)
                             .foregroundColor(.white)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.5)
                     }
                     .padding(.top, 30)
                 }
