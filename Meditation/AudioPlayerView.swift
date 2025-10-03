@@ -12,20 +12,27 @@ struct AudioPlayerView: View {
     let categoryColor: Color
     let languageManager: LanguageManager
     
-    @State private var isPlaying = false
-    @State private var currentTime: Double = 0
-    @State private var totalTime: Double = 1800 // 30 minutes default
+    @StateObject private var audioManager = AudioPlayerManager()
     @State private var showSchedule = false
     @Environment(\.dismiss) private var dismiss
     
+    // Pink accent color similar to the female character's shirt
+    private let accentColor = Color(red: 0.95, green: 0.75, blue: 0.85) // Soft pink/rose
+    
     var progress: Double {
-        totalTime > 0 ? currentTime / totalTime : 0
+        audioManager.duration > 0 ? audioManager.currentTime / audioManager.duration : 0
     }
     
     var timeRemaining: String {
-        let remaining = totalTime - currentTime
+        let remaining = audioManager.duration - audioManager.currentTime
         let minutes = Int(remaining) / 60
         let seconds = Int(remaining) % 60
+        return String(format: "%02d:%02d", minutes, seconds)
+    }
+    
+    var currentTimeString: String {
+        let minutes = Int(audioManager.currentTime) / 60
+        let seconds = Int(audioManager.currentTime) % 60
         return String(format: "%02d:%02d", minutes, seconds)
     }
     
@@ -83,7 +90,7 @@ struct AudioPlayerView: View {
                             .fill(
                                 RadialGradient(
                                     gradient: Gradient(colors: [
-                                        categoryColor.opacity(0.3),
+                                        accentColor.opacity(0.3),
                                         Color.clear
                                     ]),
                                     center: .center,
@@ -104,14 +111,14 @@ struct AudioPlayerView: View {
                                 Circle()
                                     .stroke(
                                         LinearGradient(
-                                            gradient: Gradient(colors: [categoryColor, categoryColor.opacity(0.3)]),
+                                            gradient: Gradient(colors: [accentColor, accentColor.opacity(0.5)]),
                                             startPoint: .topLeading,
                                             endPoint: .bottomTrailing
                                         ),
                                         lineWidth: 4
                                     )
                             )
-                            .shadow(color: categoryColor.opacity(0.3), radius: 20, x: 0, y: 10)
+                            .shadow(color: accentColor.opacity(0.3), radius: 20, x: 0, y: 10)
                     }
                     
                     // Title and status
@@ -122,12 +129,20 @@ struct AudioPlayerView: View {
                             .foregroundColor(.white)
                             .multilineTextAlignment(.center)
                         
-                        Text(isPlaying ? 
+                        Text(audioManager.isPlaying ? 
                              (languageManager.currentLanguage == .spanish ? "En Progreso" : "In Progress") :
                              (languageManager.currentLanguage == .spanish ? "Pausado" : "Paused")
                         )
                             .font(.subheadline)
                             .foregroundColor(.white.opacity(0.8))
+                        
+                        // Show error if any
+                        if let error = audioManager.error {
+                            Text(error)
+                                .font(.caption)
+                                .foregroundColor(accentColor)
+                                .padding(.horizontal)
+                        }
                     }
                 }
                 
@@ -138,7 +153,7 @@ struct AudioPlayerView: View {
                     // Progress indicator
                     VStack(spacing: 8) {
                         HStack {
-                            Text("00:00")
+                            Text(currentTimeString)
                                 .font(.caption)
                                 .foregroundColor(.white.opacity(0.7))
                             
@@ -158,7 +173,7 @@ struct AudioPlayerView: View {
                                     .cornerRadius(2)
                                 
                                 Rectangle()
-                                    .fill(categoryColor)
+                                    .fill(accentColor)
                                     .frame(width: geometry.size.width * progress, height: 4)
                                     .cornerRadius(2)
                             }
@@ -167,7 +182,7 @@ struct AudioPlayerView: View {
                     }
                     
                     // Wave visualization
-                    AudioWaveView(isPlaying: isPlaying, color: categoryColor)
+                    AudioWaveView(isPlaying: audioManager.isPlaying, color: accentColor)
                         .frame(height: 60)
                 }
                 .padding(.horizontal, 40)
@@ -178,9 +193,9 @@ struct AudioPlayerView: View {
                     HStack(spacing: 40) {
                         // Previous button
                         Button(action: {
-                            // Previous track action
+                            audioManager.skipBackward(seconds: 15)
                         }) {
-                            Image(systemName: "backward.fill")
+                            Image(systemName: "gobackward.15")
                                 .font(.title2)
                                 .foregroundColor(.white.opacity(0.8))
                                 .frame(width: 60, height: 60)
@@ -190,28 +205,28 @@ struct AudioPlayerView: View {
                         
                         // Play/Pause button
                         Button(action: {
-                            isPlaying.toggle()
+                            audioManager.togglePlayPause()
                         }) {
-                            Image(systemName: isPlaying ? "pause.fill" : "play.fill")
+                            Image(systemName: audioManager.isPlaying ? "pause.fill" : "play.fill")
                                 .font(.title)
                                 .foregroundColor(.white)
                                 .frame(width: 80, height: 80)
                                 .background(
                                     LinearGradient(
-                                        gradient: Gradient(colors: [categoryColor, categoryColor.opacity(0.8)]),
+                                        gradient: Gradient(colors: [accentColor, accentColor.opacity(0.8)]),
                                         startPoint: .topLeading,
                                         endPoint: .bottomTrailing
                                     )
                                 )
                                 .clipShape(Circle())
-                                .shadow(color: categoryColor.opacity(0.3), radius: 10, x: 0, y: 5)
+                                .shadow(color: accentColor.opacity(0.4), radius: 10, x: 0, y: 5)
                         }
                         
                         // Next button
                         Button(action: {
-                            // Next track action
+                            audioManager.skipForward(seconds: 15)
                         }) {
-                            Image(systemName: "forward.fill")
+                            Image(systemName: "goforward.15")
                                 .font(.title2)
                                 .foregroundColor(.white.opacity(0.8))
                                 .frame(width: 60, height: 60)
@@ -227,7 +242,7 @@ struct AudioPlayerView: View {
                         HStack {
                             Image(systemName: "triangle.fill")
                                 .font(.caption)
-                                .foregroundColor(categoryColor)
+                                .foregroundColor(accentColor)
                                 .rotationEffect(.degrees(90))
                             
                             Text(languageManager.currentLanguage == .spanish ? "Programar" : "Schedule")
@@ -249,19 +264,26 @@ struct AudioPlayerView: View {
         }
         .navigationBarHidden(true)
         .onAppear {
-            // Start progress simulation
-            startProgressSimulation()
+            // Load the audio file based on current language and category
+            let audioFileName = meditation.audioFile(languageManager: languageManager)
+            let categoryFolder: String
+            
+            switch meditation.category {
+            case .sleep: categoryFolder = "sleep"
+            case .stressRelief: categoryFolder = "stress-relief"
+            case .anxiety: categoryFolder = "anxiety"
+            case .focus: categoryFolder = "focus"
+            case .gratitude: categoryFolder = "gratitude"
+            }
+            
+            audioManager.loadAudio(fileName: audioFileName, categoryFolder: categoryFolder)
+        }
+        .onDisappear {
+            // Stop audio when leaving the screen
+            audioManager.stop()
         }
         .sheet(isPresented: $showSchedule) {
             ScheduleView(languageManager: languageManager)
-        }
-    }
-    
-    private func startProgressSimulation() {
-        Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in
-            if isPlaying && currentTime < totalTime {
-                currentTime += 1
-            }
         }
     }
 }
@@ -352,7 +374,10 @@ struct AudioPlayerView_Previews: PreviewProvider {
                 titleES: "Deriva Pacífica",
                 descriptionEN: "A calming meditation for sleep",
                 descriptionES: "Una meditación calmante para dormir",
-                imageName: "audio-art-1"
+                imageName: "audio-art-1",
+                audioFileEN: "peaceful-drift-en.mp3",
+                audioFileES: "peaceful-drift-es.mp3",
+                category: .sleep
             ),
             categoryColor: .blue,
             languageManager: LanguageManager()
