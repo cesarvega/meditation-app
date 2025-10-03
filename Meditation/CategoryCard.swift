@@ -44,7 +44,10 @@ struct CategoryCard: View {
                     Circle()
                         .fill(
                             LinearGradient(
-                                gradient: Gradient(colors: [category.color.opacity(0.6), category.color]),
+                                gradient: Gradient(colors: [
+                                    category.type == .favorites ? Color.pink.opacity(0.6) : category.color.opacity(0.6),
+                                    category.type == .favorites ? Color.pink : category.color
+                                ]),
                                 startPoint: .topLeading,
                                 endPoint: .bottomTrailing
                             )
@@ -53,7 +56,7 @@ struct CategoryCard: View {
                     
                     Image(systemName: category.icon)
                         .font(.system(size: 30))
-                        .foregroundColor(.white)
+                        .foregroundColor(category.type == .favorites ? .red : .white)
                 }
                 
                 // Text content
