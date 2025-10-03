@@ -314,6 +314,7 @@ struct AudioPlayerView: View {
             let categoryFolder: String
             
             switch meditation.category {
+            case .favorites: categoryFolder = "" // Favorites don't have their own audio folder
             case .sleep: categoryFolder = "sleep"
             case .stressRelief: categoryFolder = "stress-relief"
             case .anxiety: categoryFolder = "anxiety"
