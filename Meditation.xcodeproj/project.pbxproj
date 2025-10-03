@@ -413,7 +413,7 @@
 					{
 						CFBundleURLName = "GoogleSignIn";
 						CFBundleURLSchemes = (
-							"com.googleusercontent.apps.your-reversed-client-id",
+							"com.googleusercontent.apps.1008454603797-0m8h5q8j9k7l6n5o4p3r2s1t0u9v8w7x",
 						);
 					},
 				);
@@ -449,7 +449,7 @@
 					{
 						CFBundleURLName = "GoogleSignIn";
 						CFBundleURLSchemes = (
-							"com.googleusercontent.apps.your-reversed-client-id",
+							"com.googleusercontent.apps.1008454603797-0m8h5q8j9k7l6n5o4p3r2s1t0u9v8w7x",
 						);
 					},
 				);
