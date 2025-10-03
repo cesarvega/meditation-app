@@ -27,7 +27,7 @@ class AudioPlayerManager: NSObject, ObservableObject {
     
     private func setupAudioSession() {
         do {
-            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
+            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, options: [.mixWithOthers])
             try AVAudioSession.sharedInstance().setActive(true)
         } catch {
             self.error = "Failed to setup audio session: \(error.localizedDescription)"
@@ -204,18 +204,50 @@ class AudioPlayerManager: NSObject, ObservableObject {
     
     func loadBackgroundAudio() {
         // Load Dream of Light background audio
+        print("🔍 Searching for background audio: Dream of Light")
+        
+        // Try 1: audio/background-sound/Dream of Light.mp3
         if let url = Bundle.main.url(forResource: "Dream of Light", withExtension: "mp3", subdirectory: "audio/background-sound") {
-            do {
-                backgroundAudioPlayer = try AVAudioPlayer(contentsOf: url)
-                backgroundAudioPlayer?.numberOfLoops = -1 // Loop indefinitely
-                backgroundAudioPlayer?.volume = 0.3 // Lower volume for background
-                backgroundAudioPlayer?.prepareToPlay()
-                print("✅ Background audio loaded: Dream of Light")
-            } catch {
-                print("❌ Failed to load background audio: \(error)")
+            loadBackgroundAudioFromURL(url)
+            return
+        }
+        
+        // Try 2: Just in audio folder
+        if let url = Bundle.main.url(forResource: "Dream of Light", withExtension: "mp3", subdirectory: "audio") {
+            loadBackgroundAudioFromURL(url)
+            return
+        }
+        
+        // Try 3: In main bundle
+        if let url = Bundle.main.url(forResource: "Dream of Light", withExtension: "mp3") {
+            loadBackgroundAudioFromURL(url)
+            return
+        }
+        
+        // Try 4: Different name variations
+        let variations = ["Dream of Light", "DreamofLight", "dream-of-light"]
+        for name in variations {
+            if let url = Bundle.main.url(forResource: name, withExtension: "mp3") {
+                loadBackgroundAudioFromURL(url)
+                return
             }
-        } else {
-            print("❌ Background audio file not found")
+        }
+        
+        print("❌ Background audio file not found in bundle")
+        print("💡 The file needs to be added to the Xcode project with target membership checked")
+        self.error = "Background audio file not found. Please add Dream of Light.mp3 to the Xcode project."
+    }
+    
+    private func loadBackgroundAudioFromURL(_ url: URL) {
+        do {
+            backgroundAudioPlayer = try AVAudioPlayer(contentsOf: url)
+            backgroundAudioPlayer?.numberOfLoops = -1 // Loop indefinitely
+            backgroundAudioPlayer?.volume = 0.3 // Lower volume for background
+            backgroundAudioPlayer?.prepareToPlay()
+            print("✅ Background audio loaded from: \(url.path)")
+        } catch {
+            print("❌ Failed to load background audio: \(error)")
+            self.error = "Failed to load background audio: \(error.localizedDescription)"
         }
     }
     

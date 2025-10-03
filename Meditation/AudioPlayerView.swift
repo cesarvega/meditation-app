@@ -80,10 +80,8 @@ struct AudioPlayerView: View {
                 .padding(.horizontal, 20)
                 .padding(.top, 10)
                 
-                Spacer()
-                
                 // Main content area
-                VStack(spacing: 40) {
+                VStack(spacing: 20) {
                     // Female meditation character
                     ZStack {
                         // Ambient glow effect
@@ -95,18 +93,18 @@ struct AudioPlayerView: View {
                                         Color.clear
                                     ]),
                                     center: .center,
-                                    startRadius: 52,
-                                    endRadius: 157
+                                    startRadius: 40,
+                                    endRadius: 120
                                 )
                             )
-                            .frame(width: 315, height: 315)
+                            .frame(width: 240, height: 240)
                             .blur(radius: 20)
                         
                         // Female character image
                         Image("female")
                             .resizable()
                             .aspectRatio(contentMode: .fit)
-                            .frame(width: 210, height: 210)
+                            .frame(width: 160, height: 160)
                             .clipShape(Circle())
                             .overlay(
                                 Circle()
@@ -116,10 +114,10 @@ struct AudioPlayerView: View {
                                             startPoint: .topLeading,
                                             endPoint: .bottomTrailing
                                         ),
-                                        lineWidth: 4.2
+                                        lineWidth: 3
                                     )
                             )
-                            .shadow(color: accentColor.opacity(0.3), radius: 21, x: 0, y: 10)
+                            .shadow(color: accentColor.opacity(0.3), radius: 15, x: 0, y: 8)
                     }
                     .offset(y: isHovering ? -10 : 0)
                     .animation(
@@ -132,14 +130,13 @@ struct AudioPlayerView: View {
                     }
                     
                     // Title and status
-                    VStack(spacing: 12) {
+                    VStack(spacing: 8) {
                         Text(meditation.title(languageManager: languageManager))
-                            .font(.title)
+                            .font(.title3)
                             .fontWeight(.bold)
                             .foregroundColor(.white)
                             .multilineTextAlignment(.center)
-                            .lineLimit(nil)
-                            .fixedSize(horizontal: false, vertical: true)
+                            .lineLimit(2)
                             .padding(.horizontal, 30)
                         
                         Text(audioManager.isPlaying ? 
@@ -159,12 +156,10 @@ struct AudioPlayerView: View {
                     }
                 }
                 
-                Spacer()
-                
                 // Audio progress and wave visualization
-                VStack(spacing: 30) {
+                VStack(spacing: 15) {
                     // Progress indicator
-                    VStack(spacing: 8) {
+                    VStack(spacing: 6) {
                         HStack {
                             Text(currentTimeString)
                                 .font(.caption)
@@ -196,12 +191,12 @@ struct AudioPlayerView: View {
                     
                     // Wave visualization
                     AudioWaveView(isPlaying: audioManager.isPlaying, color: accentColor)
-                        .frame(height: 60)
+                        .frame(height: 40)
                 }
                 .padding(.horizontal, 40)
                 
                 // Control buttons
-                VStack(spacing: 30) {
+                VStack(spacing: 20) {
                     // Main playback controls
                     HStack(spacing: 40) {
                         // Previous button
@@ -209,9 +204,9 @@ struct AudioPlayerView: View {
                             audioManager.skipBackward(seconds: 15)
                         }) {
                             Image(systemName: "gobackward.15")
-                                .font(.title2)
+                                .font(.title3)
                                 .foregroundColor(.white.opacity(0.8))
-                                .frame(width: 60, height: 60)
+                                .frame(width: 50, height: 50)
                                 .background(Color.white.opacity(0.1))
                                 .clipShape(Circle())
                         }
@@ -221,9 +216,9 @@ struct AudioPlayerView: View {
                             audioManager.togglePlayPause()
                         }) {
                             Image(systemName: audioManager.isPlaying ? "pause.fill" : "play.fill")
-                                .font(.title)
+                                .font(.title2)
                                 .foregroundColor(.white)
-                                .frame(width: 80, height: 80)
+                                .frame(width: 70, height: 70)
                                 .background(
                                     LinearGradient(
                                         gradient: Gradient(colors: [accentColor, accentColor.opacity(0.8)]),
@@ -232,7 +227,7 @@ struct AudioPlayerView: View {
                                     )
                                 )
                                 .clipShape(Circle())
-                                .shadow(color: accentColor.opacity(0.4), radius: 10, x: 0, y: 5)
+                                .shadow(color: accentColor.opacity(0.4), radius: 8, x: 0, y: 4)
                         }
                         
                         // Next button
@@ -240,57 +235,57 @@ struct AudioPlayerView: View {
                             audioManager.skipForward(seconds: 15)
                         }) {
                             Image(systemName: "goforward.15")
-                                .font(.title2)
+                                .font(.title3)
                                 .foregroundColor(.white.opacity(0.8))
-                                .frame(width: 60, height: 60)
+                                .frame(width: 50, height: 50)
                                 .background(Color.white.opacity(0.1))
                                 .clipShape(Circle())
                         }
                     }
                     
                     // Playback speed control
-                    VStack(spacing: 8) {
+                    VStack(spacing: 6) {
                         Text(languageManager.currentLanguage == .spanish ? "Velocidad" : "Speed")
-                            .font(.subheadline)
+                            .font(.caption)
                             .foregroundColor(.white.opacity(0.8))
                         
                         HStack(spacing: 12) {
                             Text("0.5×")
-                                .font(.caption)
+                                .font(.caption2)
                                 .foregroundColor(.white.opacity(0.6))
                             
                             Slider(value: $playbackSpeed, in: 0.5...2.0, step: 0.1)
                                 .accentColor(accentColor)
                                 .onChange(of: playbackSpeed) { newValue in
-                                    audioManager.setPlaybackRate(newValue)
+                                    audioManager.setPlaybackRate(Float(newValue))
                                 }
                             
                             Text("2.0×")
-                                .font(.caption)
+                                .font(.caption2)
                                 .foregroundColor(.white.opacity(0.6))
                         }
                         .padding(.horizontal, 30)
                         
                         Text(String(format: "%.1f×", playbackSpeed))
-                            .font(.headline)
+                            .font(.subheadline)
                             .foregroundColor(accentColor)
                     }
-                    .padding(.vertical, 16)
+                    .padding(.vertical, 8)
                     
                     // Background music toggle
                     Button(action: {
                         audioManager.toggleBackgroundAudio()
                     }) {
-                        HStack(spacing: 12) {
+                        HStack(spacing: 10) {
                             Image(systemName: audioManager.isBackgroundPlaying ? "music.note.list" : "music.note")
-                                .font(.title3)
+                                .font(.callout)
                                 .foregroundColor(.white)
                             
                             Text(languageManager.currentLanguage == .spanish ? "Música de Fondo" : "Background Music")
-                                .font(.subheadline)
+                                .font(.caption)
                                 .foregroundColor(.white)
                         }
-                        .frame(width: 240, height: 50)
+                        .frame(width: 200, height: 40)
                         .background(
                             audioManager.isBackgroundPlaying ?
                                 LinearGradient(
@@ -304,12 +299,11 @@ struct AudioPlayerView: View {
                                     endPoint: .bottomTrailing
                                 )
                         )
-                        .cornerRadius(25)
-                        .shadow(color: audioManager.isBackgroundPlaying ? accentColor.opacity(0.3) : Color.clear, radius: 8, x: 0, y: 4)
+                        .cornerRadius(20)
+                        .shadow(color: audioManager.isBackgroundPlaying ? accentColor.opacity(0.3) : Color.clear, radius: 6, x: 0, y: 3)
                     }
-                    .padding(.top, 8)
                 }
-                .padding(.bottom, 50)
+                .padding(.bottom, 30)
             }
         }
         .navigationBarHidden(true)
