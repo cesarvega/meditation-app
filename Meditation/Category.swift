@@ -28,7 +28,7 @@ enum CategoryType: String, CaseIterable {
     
     var color: Color {
         switch self {
-        case .favorites: return .pink
+        case .favorites: return .red
         case .sleep: return .indigo
         case .stressRelief: return .pink
         case .anxiety: return .green
