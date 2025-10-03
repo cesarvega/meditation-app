@@ -13,7 +13,7 @@ struct AudioPlayerView: View {
     let languageManager: LanguageManager
     
     @StateObject private var audioManager = AudioPlayerManager()
-    @State private var showSchedule = false
+    @State private var playbackSpeed: Double = 1.0
     @Environment(\.dismiss) private var dismiss
     
     // Pink accent color similar to the female character's shirt
@@ -94,18 +94,18 @@ struct AudioPlayerView: View {
                                         Color.clear
                                     ]),
                                     center: .center,
-                                    startRadius: 50,
-                                    endRadius: 150
+                                    startRadius: 52,
+                                    endRadius: 157
                                 )
                             )
-                            .frame(width: 300, height: 300)
+                            .frame(width: 315, height: 315)
                             .blur(radius: 20)
                         
                         // Female character image
                         Image("female")
                             .resizable()
                             .aspectRatio(contentMode: .fit)
-                            .frame(width: 200, height: 200)
+                            .frame(width: 210, height: 210)
                             .clipShape(Circle())
                             .overlay(
                                 Circle()
@@ -115,10 +115,10 @@ struct AudioPlayerView: View {
                                             startPoint: .topLeading,
                                             endPoint: .bottomTrailing
                                         ),
-                                        lineWidth: 4
+                                        lineWidth: 4.2
                                     )
                             )
-                            .shadow(color: accentColor.opacity(0.3), radius: 20, x: 0, y: 10)
+                            .shadow(color: accentColor.opacity(0.3), radius: 21, x: 0, y: 10)
                     }
                     
                     // Title and status
@@ -128,6 +128,9 @@ struct AudioPlayerView: View {
                             .fontWeight(.bold)
                             .foregroundColor(.white)
                             .multilineTextAlignment(.center)
+                            .lineLimit(nil)
+                            .fixedSize(horizontal: false, vertical: true)
+                            .padding(.horizontal, 30)
                         
                         Text(audioManager.isPlaying ? 
                              (languageManager.currentLanguage == .spanish ? "En Progreso" : "In Progress") :
@@ -235,29 +238,66 @@ struct AudioPlayerView: View {
                         }
                     }
                     
-                    // Schedule button
-                    Button(action: {
-                        showSchedule = true
-                    }) {
-                        HStack {
-                            Image(systemName: "triangle.fill")
+                    // Playback speed control
+                    VStack(spacing: 8) {
+                        Text(languageManager.currentLanguage == .spanish ? "Velocidad" : "Speed")
+                            .font(.subheadline)
+                            .foregroundColor(.white.opacity(0.8))
+                        
+                        HStack(spacing: 12) {
+                            Text("0.5×")
                                 .font(.caption)
-                                .foregroundColor(accentColor)
-                                .rotationEffect(.degrees(90))
+                                .foregroundColor(.white.opacity(0.6))
                             
-                            Text(languageManager.currentLanguage == .spanish ? "Programar" : "Schedule")
-                                .font(.headline)
+                            Slider(value: $playbackSpeed, in: 0.5...2.0, step: 0.1)
+                                .accentColor(accentColor)
+                                .onChange(of: playbackSpeed) { newValue in
+                                    audioManager.setPlaybackRate(newValue)
+                                }
+                            
+                            Text("2.0×")
+                                .font(.caption)
+                                .foregroundColor(.white.opacity(0.6))
+                        }
+                        .padding(.horizontal, 30)
+                        
+                        Text(String(format: "%.1f×", playbackSpeed))
+                            .font(.headline)
+                            .foregroundColor(accentColor)
+                    }
+                    .padding(.vertical, 16)
+                    
+                    // Background music toggle
+                    Button(action: {
+                        audioManager.toggleBackgroundAudio()
+                    }) {
+                        HStack(spacing: 12) {
+                            Image(systemName: audioManager.isBackgroundPlaying ? "music.note.list" : "music.note")
+                                .font(.title3)
+                                .foregroundColor(.white)
+                            
+                            Text(languageManager.currentLanguage == .spanish ? "Música de Fondo" : "Background Music")
+                                .font(.subheadline)
                                 .foregroundColor(.white)
                         }
-                        .padding(.vertical, 12)
-                        .padding(.horizontal, 30)
-                        .background(Color.white.opacity(0.1))
-                        .cornerRadius(25)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 25)
-                                .stroke(Color.white.opacity(0.3), lineWidth: 1)
+                        .frame(width: 240, height: 50)
+                        .background(
+                            audioManager.isBackgroundPlaying ?
+                                LinearGradient(
+                                    gradient: Gradient(colors: [accentColor, accentColor.opacity(0.8)]),
+                                    startPoint: .topLeading,
+                                    endPoint: .bottomTrailing
+                                ) :
+                                LinearGradient(
+                                    gradient: Gradient(colors: [Color.white.opacity(0.2), Color.white.opacity(0.1)]),
+                                    startPoint: .topLeading,
+                                    endPoint: .bottomTrailing
+                                )
                         )
+                        .cornerRadius(25)
+                        .shadow(color: audioManager.isBackgroundPlaying ? accentColor.opacity(0.3) : Color.clear, radius: 8, x: 0, y: 4)
                     }
+                    .padding(.top, 8)
                 }
                 .padding(.bottom, 50)
             }
@@ -277,13 +317,13 @@ struct AudioPlayerView: View {
             }
             
             audioManager.loadAudio(fileName: audioFileName, categoryFolder: categoryFolder)
+            
+            // Load background audio
+            audioManager.loadBackgroundAudio()
         }
         .onDisappear {
             // Stop audio when leaving the screen
             audioManager.stop()
-        }
-        .sheet(isPresented: $showSchedule) {
-            ScheduleView(languageManager: languageManager)
         }
     }
 }
@@ -330,7 +370,8 @@ struct AudioWaveView: View {
     }
 }
 
-// Schedule Modal View
+// Schedule Modal View - Commented out for now
+/*
 struct ScheduleView: View {
     let languageManager: LanguageManager
     @Environment(\.dismiss) private var dismiss
@@ -363,6 +404,7 @@ struct ScheduleView: View {
         }
     }
 }
+*/
 
 // Preview
 #if DEBUG

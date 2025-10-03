@@ -10,6 +10,7 @@ import SwiftUI
 struct ContentView: View {
     @State private var languageManager = LanguageManager()
     @State private var showLanguagePicker = false
+    @State private var refreshID = UUID()
 
     var body: some View {
         NavigationStack {
@@ -43,15 +44,18 @@ struct ContentView: View {
                             .font(.title2)
                             .foregroundColor(.white)
                             .lineLimit(1)
-                            .minimumScaleFactor(0.5)
                         Text(languageManager.localizedString(.userName))
                             .font(.title)
                             .fontWeight(.bold)
                             .foregroundColor(.white)
-                            .lineLimit(1)
-                            .minimumScaleFactor(0.5)
+                            .lineLimit(3)
+                            .multilineTextAlignment(.center)
+                            .fixedSize(horizontal: false, vertical: true)
+                            .frame(maxWidth: 280)
                     }
+                    .frame(height: 80)
                     .padding(.top, 30)
+                    .id(refreshID)
                 }
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button(action: {
@@ -64,6 +68,10 @@ struct ContentView: View {
             }
             .toolbarBackground(.clear, for: .navigationBar)
             .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
+            .onAppear {
+                // Refresh toolbar when view appears
+                refreshID = UUID()
+            }
             .sheet(isPresented: $showLanguagePicker) {
                 LanguagePickerView(languageManager: languageManager)
             }

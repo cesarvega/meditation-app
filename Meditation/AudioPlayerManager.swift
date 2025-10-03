@@ -14,8 +14,10 @@ class AudioPlayerManager: NSObject, ObservableObject {
     @Published var currentTime: Double = 0
     @Published var duration: Double = 0
     @Published var error: String?
+    @Published var isBackgroundPlaying: Bool = false
     
     private var audioPlayer: AVAudioPlayer?
+    private var backgroundAudioPlayer: AVAudioPlayer?
     private var timer: Timer?
     
     override init() {
@@ -169,6 +171,10 @@ class AudioPlayerManager: NSObject, ObservableObject {
         currentTime = 0
         isPlaying = false
         stopTimer()
+        
+        // Also stop background audio
+        backgroundAudioPlayer?.stop()
+        isBackgroundPlaying = false
     }
     
     func seek(to time: Double) {
@@ -189,6 +195,53 @@ class AudioPlayerManager: NSObject, ObservableObject {
         seek(to: newTime)
     }
     
+    func setPlaybackRate(_ rate: Float) {
+        guard let player = audioPlayer else { return }
+        player.enableRate = true
+        player.rate = rate
+        print("🎵 Playback rate set to: \(rate)x")
+    }
+    
+    func loadBackgroundAudio() {
+        // Load Dream of Light background audio
+        if let url = Bundle.main.url(forResource: "Dream of Light", withExtension: "mp3", subdirectory: "audio/background-sound") {
+            do {
+                backgroundAudioPlayer = try AVAudioPlayer(contentsOf: url)
+                backgroundAudioPlayer?.numberOfLoops = -1 // Loop indefinitely
+                backgroundAudioPlayer?.volume = 0.3 // Lower volume for background
+                backgroundAudioPlayer?.prepareToPlay()
+                print("✅ Background audio loaded: Dream of Light")
+            } catch {
+                print("❌ Failed to load background audio: \(error)")
+            }
+        } else {
+            print("❌ Background audio file not found")
+        }
+    }
+    
+    func toggleBackgroundAudio() {
+        guard let bgPlayer = backgroundAudioPlayer else {
+            loadBackgroundAudio()
+            guard backgroundAudioPlayer != nil else { return }
+            toggleBackgroundAudio()
+            return
+        }
+        
+        if isBackgroundPlaying {
+            bgPlayer.pause()
+            isBackgroundPlaying = false
+            print("⏸️ Background audio paused")
+        } else {
+            bgPlayer.play()
+            isBackgroundPlaying = true
+            print("▶️ Background audio playing")
+        }
+    }
+    
+    func setBackgroundVolume(_ volume: Float) {
+        backgroundAudioPlayer?.volume = volume
+    }
+    
     private func startTimer() {
         timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { [weak self] _ in
             guard let self = self, let player = self.audioPlayer else { return }
@@ -204,6 +257,7 @@ class AudioPlayerManager: NSObject, ObservableObject {
     deinit {
         stopTimer()
         audioPlayer?.stop()
+        backgroundAudioPlayer?.stop()
     }
 }
 
