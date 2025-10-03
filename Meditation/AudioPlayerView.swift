@@ -398,7 +398,7 @@ struct AudioPlayerView: View {
                                 
                                 // Show current background track name if multiple available
                                 if audioManager.hasMultipleBackgroundTracks && !audioManager.currentBackgroundTrackName.isEmpty {
-                                    Text(audioManager.currentBackgroundTrackName)
+                                    Text(audioManager.displayBackgroundTrackName)
                                         .font(.caption2)
                                         .foregroundColor(.white.opacity(0.7))
                                         .lineLimit(1)

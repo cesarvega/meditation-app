@@ -25,11 +25,15 @@ class AudioPlayerManager: NSObject, ObservableObject {
     
     // Available background tracks
     private let backgroundTracks = [
-        "Dream of Light",
-        "Nature Sounds",
-        "Rain Drops",
-        "Ocean Waves",
-        "Forest Ambience"
+        "Celestial_Whispers",
+        "Cosmic_Journey",
+        "Ethereal_Waves",
+        "Heavenly_Breeze",
+        "Luminous_Dreams",
+        "Peaceful_Cosmos",
+        "Serene_Galaxy",
+        "Starlight_Meditation",
+        "Tranquil_Skies"
     ]
     
     var hasMultipleBackgroundTracks: Bool {
@@ -42,6 +46,18 @@ class AudioPlayerManager: NSObject, ObservableObject {
     
     var hasNextBackground: Bool {
         return currentBackgroundTrackIndex < backgroundTracks.count - 1
+    }
+    
+    // Get user-friendly name for display
+    var displayBackgroundTrackName: String {
+        return formatTrackNameForDisplay(currentBackgroundTrackName)
+    }
+    
+    // Convert filename to display name
+    private func formatTrackNameForDisplay(_ trackName: String) -> String {
+        return trackName
+            .replacingOccurrences(of: "_", with: " ")
+            .capitalized
     }
     
     override init() {

@@ -9,12 +9,46 @@ import SwiftUI
 
 struct SettingsView: View {
     @Environment(\.dismiss) private var dismiss
+    @EnvironmentObject var authManager: AuthenticationManager
     @Bindable var languageManager: LanguageManager
     @Bindable var themeManager: ThemeManager
+    @State private var showingProfileEdit = false
     
     var body: some View {
         NavigationStack {
             List {
+                // Profile Section
+                Section {
+                    Button(action: {
+                        showingProfileEdit = true
+                    }) {
+                        HStack {
+                            Image(systemName: "person.circle.fill")
+                                .font(.title2)
+                                .foregroundColor(themeManager.currentTheme.accentColor)
+                            
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("Edit Profile")
+                                    .font(.body)
+                                    .foregroundColor(.primary)
+                                Text(authManager.currentUser?.name ?? "User")
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                            }
+                            
+                            Spacer()
+                            
+                            Image(systemName: "chevron.right")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+                        .padding(.vertical, 4)
+                    }
+                } header: {
+                    Text(languageManager.currentLanguage == .spanish ? "Perfil" : "Profile")
+                        .font(.headline)
+                }
+                
                 // Language Section
                 Section {
                     ForEach(AppLanguage.allCases) { language in
