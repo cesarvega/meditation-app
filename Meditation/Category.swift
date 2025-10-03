@@ -8,6 +8,7 @@
 import SwiftUI
 
 enum CategoryType: String, CaseIterable {
+    case favorites
     case sleep
     case stressRelief
     case anxiety
@@ -16,6 +17,7 @@ enum CategoryType: String, CaseIterable {
     
     var icon: String {
         switch self {
+        case .favorites: return "heart.fill"
         case .sleep: return "moon.stars.fill"
         case .stressRelief: return "heart.circle.fill"
         case .anxiety: return "leaf.fill"
@@ -26,6 +28,7 @@ enum CategoryType: String, CaseIterable {
     
     var color: Color {
         switch self {
+        case .favorites: return .red
         case .sleep: return .indigo
         case .stressRelief: return .pink
         case .anxiety: return .green
@@ -36,6 +39,7 @@ enum CategoryType: String, CaseIterable {
     
     var nameKey: LocalizationKey {
         switch self {
+        case .favorites: return .categoryFavorites
         case .sleep: return .categorySleep
         case .stressRelief: return .categoryStressRelief
         case .anxiety: return .categoryAnxiety
@@ -46,6 +50,7 @@ enum CategoryType: String, CaseIterable {
     
     var descriptionKey: LocalizationKey {
         switch self {
+        case .favorites: return .descFavorites
         case .sleep: return .descSleep
         case .stressRelief: return .descStressRelief
         case .anxiety: return .descAnxiety

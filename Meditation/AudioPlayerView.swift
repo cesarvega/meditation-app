@@ -11,6 +11,7 @@ struct AudioPlayerView: View {
     let meditation: Meditation
     let categoryColor: Color
     let languageManager: LanguageManager
+    let favoritesManager: FavoritesManager
     
     @StateObject private var audioManager = AudioPlayerManager()
     @State private var playbackSpeed: Double = 1.0
@@ -69,11 +70,11 @@ struct AudioPlayerView: View {
                     Spacer()
                     
                     Button(action: {
-                        // Bookmark action
+                        favoritesManager.toggleFavorite(meditation.uniqueId)
                     }) {
-                        Image(systemName: "bookmark")
+                        Image(systemName: favoritesManager.isFavorite(meditation.uniqueId) ? "bookmark.fill" : "bookmark")
                             .font(.title2)
-                            .foregroundColor(.white)
+                            .foregroundColor(favoritesManager.isFavorite(meditation.uniqueId) ? accentColor : .white)
                             .frame(width: 44, height: 44)
                     }
                 }
@@ -416,6 +417,7 @@ struct AudioPlayerView_Previews: PreviewProvider {
     static var previews: some View {
         AudioPlayerView(
             meditation: Meditation(
+                uniqueId: "peaceful-drift",
                 titleEN: "Peaceful Drift",
                 titleES: "Deriva Pacífica",
                 descriptionEN: "A calming meditation for sleep",
@@ -426,7 +428,8 @@ struct AudioPlayerView_Previews: PreviewProvider {
                 category: .sleep
             ),
             categoryColor: .blue,
-            languageManager: LanguageManager()
+            languageManager: LanguageManager(),
+            favoritesManager: FavoritesManager()
         )
     }
 }

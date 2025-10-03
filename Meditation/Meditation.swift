@@ -9,6 +9,7 @@ import Foundation
 
 struct Meditation: Identifiable {
     let id = UUID()
+    let uniqueId: String // For favorites persistence
     let titleEN: String
     let titleES: String
     let descriptionEN: String
@@ -33,6 +34,7 @@ struct Meditation: Identifiable {
     func audioPath(languageManager: LanguageManager) -> String {
         let categoryFolder: String
         switch category {
+        case .favorites: categoryFolder = "" // Favorites don't have their own folder
         case .sleep: categoryFolder = "sleep"
         case .stressRelief: categoryFolder = "stress-relief"
         case .anxiety: categoryFolder = "anxiety"
@@ -44,9 +46,12 @@ struct Meditation: Identifiable {
     
     static func meditations(for category: CategoryType) -> [Meditation] {
         switch category {
+        case .favorites:
+            return [] // Favorites are handled separately
         case .sleep:
             return [
                 Meditation(
+                    uniqueId: "peaceful-drift",
                     titleEN: "Peaceful Drift",
                     titleES: "Deriva Pacífica",
                     descriptionEN: "Gently guide your mind and body into deep rest with calming breath and soft visualization.",
@@ -57,6 +62,7 @@ struct Meditation: Identifiable {
                     category: .sleep
                 ),
                 Meditation(
+                    uniqueId: "night-ocean-waves",
                     titleEN: "Night Ocean Waves",
                     titleES: "Olas del Océano Nocturno",
                     descriptionEN: "A soothing meditation using imagery of the sea to release tension and invite sleep.",
@@ -67,6 +73,7 @@ struct Meditation: Identifiable {
                     category: .sleep
                 ),
                 Meditation(
+                    uniqueId: "release-the-day",
                     titleEN: "Release the Day",
                     titleES: "Libera el Día",
                     descriptionEN: "Let go of thoughts, worries, and busyness as you prepare for a restorative night's rest.",
@@ -81,6 +88,7 @@ struct Meditation: Identifiable {
         case .stressRelief:
             return [
                 Meditation(
+                    uniqueId: "unwind-the-mind",
                     titleEN: "Unwind the Mind",
                     titleES: "Relaja la Mente",
                     descriptionEN: "Ease mental tension with gentle breathing and body relaxation.",
@@ -91,6 +99,7 @@ struct Meditation: Identifiable {
                     category: .stressRelief
                 ),
                 Meditation(
+                    uniqueId: "melting-the-pressure",
                     titleEN: "Melting the Pressure",
                     titleES: "Derritiendo la Presión",
                     descriptionEN: "A calming practice to soften stress, letting it dissolve from head to toe.",
@@ -101,6 +110,7 @@ struct Meditation: Identifiable {
                     category: .stressRelief
                 ),
                 Meditation(
+                    uniqueId: "quiet-center",
                     titleEN: "Quiet Center",
                     titleES: "Centro Tranquilo",
                     descriptionEN: "Find your inner stillness by focusing on breath and grounding awareness.",
@@ -115,6 +125,7 @@ struct Meditation: Identifiable {
         case .anxiety:
             return [
                 Meditation(
+                    uniqueId: "calm-in-the-storm",
                     titleEN: "Calm in the Storm",
                     titleES: "Calma en la Tormenta",
                     descriptionEN: "Learn to anchor yourself in the present when anxiety feels overwhelming.",
@@ -125,6 +136,7 @@ struct Meditation: Identifiable {
                     category: .anxiety
                 ),
                 Meditation(
+                    uniqueId: "ground-and-breathe",
                     titleEN: "Ground & Breathe",
                     titleES: "Enraízate y Respira",
                     descriptionEN: "A simple practice to steady the mind and reconnect to safety through the breath.",
@@ -135,6 +147,7 @@ struct Meditation: Identifiable {
                     category: .anxiety
                 ),
                 Meditation(
+                    uniqueId: "soft-heart-steady-mind",
                     titleEN: "Soft Heart, Steady Mind",
                     titleES: "Corazón Suave, Mente Firme",
                     descriptionEN: "Gentle affirmations to calm racing thoughts and invite peace into the body.",
@@ -149,6 +162,7 @@ struct Meditation: Identifiable {
         case .focus:
             return [
                 Meditation(
+                    uniqueId: "clear-the-fog",
                     titleEN: "Clear the Fog",
                     titleES: "Despeja la Niebla",
                     descriptionEN: "Sharpen your attention with mindful breathing and visualization techniques.",
@@ -159,6 +173,7 @@ struct Meditation: Identifiable {
                     category: .focus
                 ),
                 Meditation(
+                    uniqueId: "laser-focus",
                     titleEN: "Laser Focus",
                     titleES: "Enfoque Láser",
                     descriptionEN: "Guide your energy into one point of concentration for productivity and clarity.",
@@ -169,6 +184,7 @@ struct Meditation: Identifiable {
                     category: .focus
                 ),
                 Meditation(
+                    uniqueId: "present-power",
                     titleEN: "Present Power",
                     titleES: "Poder Presente",
                     descriptionEN: "A short meditation to pull your mind back from distractions and into the task at hand.",
@@ -183,6 +199,7 @@ struct Meditation: Identifiable {
         case .gratitude:
             return [
                 Meditation(
+                    uniqueId: "grateful-heart",
                     titleEN: "Grateful Heart",
                     titleES: "Corazón Agradecido",
                     descriptionEN: "Reflect on what you appreciate in this moment and let gratitude fill you with warmth.",
@@ -193,6 +210,7 @@ struct Meditation: Identifiable {
                     category: .gratitude
                 ),
                 Meditation(
+                    uniqueId: "seeds-of-joy",
                     titleEN: "Seeds of Joy",
                     titleES: "Semillas de Alegría",
                     descriptionEN: "A meditation to notice life's small blessings and expand your sense of abundance.",
@@ -203,6 +221,7 @@ struct Meditation: Identifiable {
                     category: .gratitude
                 ),
                 Meditation(
+                    uniqueId: "circle-of-thanks",
                     titleEN: "Circle of Thanks",
                     titleES: "Círculo de Gratitud",
                     descriptionEN: "Extend gratitude outward—to people, experiences, and the world around you.",
@@ -214,5 +233,28 @@ struct Meditation: Identifiable {
                 )
             ]
         }
+    }
+    
+    // Get all meditations from all categories
+    static var allMeditations: [Meditation] {
+        var all: [Meditation] = []
+        for category in CategoryType.allCases {
+            if category != .favorites {
+                all.append(contentsOf: meditations(for: category))
+            }
+        }
+        return all
+    }
+    
+    // Get favorites based on FavoritesManager
+    static func favoritesMeditations(favoritesManager: FavoritesManager) -> [Meditation] {
+        return allMeditations.filter { meditation in
+            favoritesManager.isFavorite(meditation.uniqueId)
+        }
+    }
+    
+    // Find meditation by unique ID
+    static func meditation(withId uniqueId: String) -> Meditation? {
+        return allMeditations.first { $0.uniqueId == uniqueId }
     }
 }

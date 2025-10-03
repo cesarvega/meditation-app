@@ -63,6 +63,7 @@ enum LocalizationKey {
     case chooseLanguage
     
     // Category names
+    case categoryFavorites
     case categorySleep
     case categoryStressRelief
     case categoryAnxiety
@@ -70,6 +71,7 @@ enum LocalizationKey {
     case categoryGratitude
     
     // Category descriptions
+    case descFavorites
     case descSleep
     case descStressRelief
     case descAnxiety
@@ -84,6 +86,7 @@ enum LocalizationKey {
         case .chooseLanguage: return "Choose Language"
         
         // Categories
+        case .categoryFavorites: return "Favorites"
         case .categorySleep: return "Sleep"
         case .categoryStressRelief: return "Stress Relief"
         case .categoryAnxiety: return "Anxiety"
@@ -91,6 +94,7 @@ enum LocalizationKey {
         case .categoryGratitude: return "Gratitude"
         
         // Descriptions
+        case .descFavorites: return "Your favorite meditations"
         case .descSleep: return "To help you relax and go to sleep"
         case .descStressRelief: return "Techniques to reduce your daily stress"
         case .descAnxiety: return "Calming exercises for peace of mind"
@@ -107,6 +111,7 @@ enum LocalizationKey {
         case .chooseLanguage: return "Elegir Idioma"
         
         // Categories
+        case .categoryFavorites: return "Favoritos"
         case .categorySleep: return "Dormir"
         case .categoryStressRelief: return "Alivio del Estrés"
         case .categoryAnxiety: return "Ansiedad"
@@ -114,6 +119,7 @@ enum LocalizationKey {
         case .categoryGratitude: return "Gratitud"
         
         // Descriptions
+        case .descFavorites: return "Tus meditaciones favoritas"
         case .descSleep: return "Para ayudarte a relajarte y dormir"
         case .descStressRelief: return "Técnicas para reducir el estrés diario"
         case .descAnxiety: return "Ejercicios calmantes para la paz mental"

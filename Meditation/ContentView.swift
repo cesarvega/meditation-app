@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var languageManager = LanguageManager()
+    @State private var favoritesManager = FavoritesManager()
     @State private var showLanguagePicker = false
     @State private var refreshID = UUID()
 
@@ -17,7 +18,7 @@ struct ContentView: View {
             ScrollView {
                 VStack(spacing: 16) {
                     ForEach(Category.allCategories) { category in
-                        NavigationLink(destination: CategoryDetailView(category: category, languageManager: languageManager)) {
+                        NavigationLink(destination: CategoryDetailView(category: category, languageManager: languageManager, favoritesManager: favoritesManager)) {
                             CategoryCard(category: category, languageManager: languageManager)
                         }
                         .buttonStyle(PlainButtonStyle())

@@ -11,12 +11,14 @@ struct MeditationCard: View {
     let meditation: Meditation
     let categoryColor: Color
     let languageManager: LanguageManager
+    let favoritesManager: FavoritesManager
     
     var body: some View {
         NavigationLink(destination: AudioPlayerView(
             meditation: meditation,
             categoryColor: categoryColor,
-            languageManager: languageManager
+            languageManager: languageManager,
+            favoritesManager: favoritesManager
         )) {
             HStack(spacing: 16) {
                 // Audio art image with rounded corners
