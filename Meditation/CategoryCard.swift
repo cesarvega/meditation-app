@@ -17,7 +17,7 @@ struct CategoryCard: View {
             HStack {
                 HStack(spacing: 8) {
                     Circle()
-                        .fill(category.color)
+                        .fill(category.type == .favorites ? Color.blue.opacity(0.6) : category.color)
                         .frame(width: 8, height: 8)
                     
                     Text(category.name(languageManager: languageManager))
@@ -45,8 +45,8 @@ struct CategoryCard: View {
                         .fill(
                             LinearGradient(
                                 gradient: Gradient(colors: [
-                                    category.type == .favorites ? Color.pink.opacity(0.6) : category.color.opacity(0.6),
-                                    category.type == .favorites ? Color.pink : category.color
+                                    category.type == .favorites ? Color.blue.opacity(0.3) : category.color.opacity(0.6),
+                                    category.type == .favorites ? Color.blue.opacity(0.6) : category.color
                                 ]),
                                 startPoint: .topLeading,
                                 endPoint: .bottomTrailing
@@ -56,7 +56,7 @@ struct CategoryCard: View {
                     
                     Image(systemName: category.icon)
                         .font(.system(size: 30))
-                        .foregroundColor(category.type == .favorites ? .red : .white)
+                        .foregroundColor(.white)
                 }
                 
                 // Text content

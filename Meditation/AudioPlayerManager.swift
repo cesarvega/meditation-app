@@ -15,11 +15,34 @@ class AudioPlayerManager: NSObject, ObservableObject {
     @Published var duration: Double = 0
     @Published var error: String?
     @Published var isBackgroundPlaying: Bool = false
+    @Published var currentBackgroundTrackName: String = ""
+    @Published var currentBackgroundTrackIndex: Int = 0
     
     private var audioPlayer: AVAudioPlayer?
     private var backgroundAudioPlayer: AVAudioPlayer?
     private var timer: Timer?
     private var currentRate: Float = 1.0
+    
+    // Available background tracks
+    private let backgroundTracks = [
+        "Dream of Light",
+        "Nature Sounds",
+        "Rain Drops",
+        "Ocean Waves",
+        "Forest Ambience"
+    ]
+    
+    var hasMultipleBackgroundTracks: Bool {
+        return backgroundTracks.count > 1
+    }
+    
+    var hasPreviousBackground: Bool {
+        return currentBackgroundTrackIndex > 0
+    }
+    
+    var hasNextBackground: Bool {
+        return currentBackgroundTrackIndex < backgroundTracks.count - 1
+    }
     
     override init() {
         super.init()
@@ -222,39 +245,60 @@ class AudioPlayerManager: NSObject, ObservableObject {
     }
     
     func loadBackgroundAudio() {
-        // Load Dream of Light background audio
-        print("🔍 Searching for background audio: Dream of Light")
+        loadBackgroundAudio(at: currentBackgroundTrackIndex)
+    }
+    
+    func loadBackgroundAudio(at index: Int) {
+        guard index >= 0 && index < backgroundTracks.count else {
+            print("❌ Invalid background track index: \(index)")
+            return
+        }
         
-        // Try 1: audio/background-sound/Dream of Light.mp3
-        if let url = Bundle.main.url(forResource: "Dream of Light", withExtension: "mp3", subdirectory: "audio/background-sound") {
+        let trackName = backgroundTracks[index]
+        currentBackgroundTrackIndex = index
+        currentBackgroundTrackName = trackName
+        
+        print("🔍 Searching for background audio: \(trackName)")
+        
+        // Try 1: audio/background-sound/[trackName].mp3
+        if let url = Bundle.main.url(forResource: trackName, withExtension: "mp3", subdirectory: "audio/background-sound") {
             loadBackgroundAudioFromURL(url)
             return
         }
         
         // Try 2: Just in audio folder
-        if let url = Bundle.main.url(forResource: "Dream of Light", withExtension: "mp3", subdirectory: "audio") {
+        if let url = Bundle.main.url(forResource: trackName, withExtension: "mp3", subdirectory: "audio") {
             loadBackgroundAudioFromURL(url)
             return
         }
         
         // Try 3: In main bundle
-        if let url = Bundle.main.url(forResource: "Dream of Light", withExtension: "mp3") {
+        if let url = Bundle.main.url(forResource: trackName, withExtension: "mp3") {
             loadBackgroundAudioFromURL(url)
             return
         }
         
-        // Try 4: Different name variations
-        let variations = ["Dream of Light", "DreamofLight", "dream-of-light"]
-        for name in variations {
-            if let url = Bundle.main.url(forResource: name, withExtension: "mp3") {
-                loadBackgroundAudioFromURL(url)
-                return
+        // Try 4: Different name variations for backwards compatibility
+        if trackName == "Dream of Light" {
+            let variations = ["DreamofLight", "dream-of-light"]
+            for name in variations {
+                if let url = Bundle.main.url(forResource: name, withExtension: "mp3") {
+                    loadBackgroundAudioFromURL(url)
+                    return
+                }
             }
         }
         
-        print("❌ Background audio file not found in bundle")
+        print("❌ Background audio file not found: \(trackName)")
         print("💡 The file needs to be added to the Xcode project with target membership checked")
-        self.error = "Background audio file not found. Please add Dream of Light.mp3 to the Xcode project."
+        
+        // Try to load the first available track as fallback
+        if index != 0 {
+            print("🔄 Trying to load default track instead...")
+            loadBackgroundAudio(at: 0)
+        } else {
+            self.error = "Background audio file not found: \(trackName)"
+        }
     }
     
     private func loadBackgroundAudioFromURL(_ url: URL) {
@@ -291,6 +335,56 @@ class AudioPlayerManager: NSObject, ObservableObject {
     
     func setBackgroundVolume(_ volume: Float) {
         backgroundAudioPlayer?.volume = volume
+    }
+    
+    func playPreviousBackgroundTrack() {
+        guard hasPreviousBackground else { return }
+        
+        let wasPlaying = isBackgroundPlaying
+        
+        // Stop current background if playing
+        if isBackgroundPlaying {
+            backgroundAudioPlayer?.stop()
+            isBackgroundPlaying = false
+        }
+        
+        // Load previous track
+        let newIndex = currentBackgroundTrackIndex - 1
+        loadBackgroundAudio(at: newIndex)
+        
+        // Resume playback if it was playing before
+        if wasPlaying {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                self.toggleBackgroundAudio()
+            }
+        }
+        
+        print("⏮️ Switched to previous background track: \(currentBackgroundTrackName)")
+    }
+    
+    func playNextBackgroundTrack() {
+        guard hasNextBackground else { return }
+        
+        let wasPlaying = isBackgroundPlaying
+        
+        // Stop current background if playing
+        if isBackgroundPlaying {
+            backgroundAudioPlayer?.stop()
+            isBackgroundPlaying = false
+        }
+        
+        // Load next track
+        let newIndex = currentBackgroundTrackIndex + 1
+        loadBackgroundAudio(at: newIndex)
+        
+        // Resume playback if it was playing before
+        if wasPlaying {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                self.toggleBackgroundAudio()
+            }
+        }
+        
+        print("⏭️ Switched to next background track: \(currentBackgroundTrackName)")
     }
     
     private func startTimer() {

@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct AudioPlayerView: View {
-    let meditation: Meditation
+    @State var meditation: Meditation
     let categoryColor: Color
     let languageManager: LanguageManager
     let favoritesManager: FavoritesManager
@@ -17,6 +17,57 @@ struct AudioPlayerView: View {
     @State private var playbackSpeed: Double = 1.0
     @State private var isHovering: Bool = false
     @Environment(\.dismiss) private var dismiss
+    
+    // Track meditations in the same category
+    private var categoryMeditations: [Meditation] {
+        if meditation.category == .favorites {
+            return Meditation.favoritesMeditations(favoritesManager: favoritesManager)
+        } else {
+            return Meditation.meditations(for: meditation.category)
+        }
+    }
+    
+    private var currentIndex: Int {
+        categoryMeditations.firstIndex { $0.uniqueId == meditation.uniqueId } ?? 0
+    }
+    
+    private var hasNextTrack: Bool {
+        currentIndex < categoryMeditations.count - 1
+    }
+    
+    private var hasPreviousTrack: Bool {
+        currentIndex > 0
+    }
+    
+    // Track navigation methods
+    private func playPreviousTrack() {
+        if hasPreviousTrack {
+            let previousMeditation = categoryMeditations[currentIndex - 1]
+            meditation = previousMeditation
+            loadCurrentTrack()
+        }
+    }
+    
+    private func playNextTrack() {
+        if hasNextTrack {
+            let nextMeditation = categoryMeditations[currentIndex + 1]
+            meditation = nextMeditation
+            loadCurrentTrack()
+        }
+    }
+    
+    private func loadCurrentTrack() {
+        let audioFileName = languageManager.currentLanguage == .spanish ? meditation.audioFileES : meditation.audioFileEN
+        let categoryFolder = meditation.category.rawValue
+        audioManager.loadAudio(fileName: audioFileName, categoryFolder: categoryFolder)
+        
+        // Start playing the new track automatically
+        if !audioManager.isPlaying {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                audioManager.togglePlayPause()
+            }
+        }
+    }
     
     // Pink accent color similar to the female character's shirt
     private let accentColor = Color(red: 0.95, green: 0.75, blue: 0.85) // Soft pink/rose
@@ -147,6 +198,13 @@ struct AudioPlayerView: View {
                             .font(.subheadline)
                             .foregroundColor(.white.opacity(0.8))
                         
+                        // Track counter
+                        if categoryMeditations.count > 1 {
+                            Text("\(currentIndex + 1) \(languageManager.currentLanguage == .spanish ? "de" : "of") \(categoryMeditations.count)")
+                                .font(.caption)
+                                .foregroundColor(.white.opacity(0.6))
+                        }
+                        
                         // Show error if any
                         if let error = audioManager.error {
                             Text(error)
@@ -198,17 +256,30 @@ struct AudioPlayerView: View {
                 
                 // Control buttons
                 VStack(spacing: 20) {
-                    // Main playback controls
-                    HStack(spacing: 40) {
-                        // Previous button
+                    // All main playback controls in one line
+                    HStack(spacing: 15) {
+                        // Previous track button
+                        Button(action: {
+                            playPreviousTrack()
+                        }) {
+                            Image(systemName: "backward.fill")
+                                .font(.title3)
+                                .foregroundColor(hasPreviousTrack ? .white.opacity(0.8) : .white.opacity(0.4))
+                                .frame(width: 45, height: 45)
+                                .background(Color.white.opacity(0.1))
+                                .clipShape(Circle())
+                        }
+                        .disabled(!hasPreviousTrack)
+                        
+                        // Skip backward 15 seconds
                         Button(action: {
                             audioManager.skipBackward(seconds: 15)
                         }) {
                             Image(systemName: "gobackward.15")
                                 .font(.title3)
-                                .foregroundColor(.white.opacity(0.8))
-                                .frame(width: 50, height: 50)
-                                .background(Color.white.opacity(0.1))
+                                .foregroundColor(.white.opacity(0.7))
+                                .frame(width: 45, height: 45)
+                                .background(Color.white.opacity(0.08))
                                 .clipShape(Circle())
                         }
                         
@@ -231,77 +302,137 @@ struct AudioPlayerView: View {
                                 .shadow(color: accentColor.opacity(0.4), radius: 8, x: 0, y: 4)
                         }
                         
-                        // Next button
+                        // Skip forward 15 seconds
                         Button(action: {
                             audioManager.skipForward(seconds: 15)
                         }) {
                             Image(systemName: "goforward.15")
                                 .font(.title3)
-                                .foregroundColor(.white.opacity(0.8))
-                                .frame(width: 50, height: 50)
+                                .foregroundColor(.white.opacity(0.7))
+                                .frame(width: 45, height: 45)
+                                .background(Color.white.opacity(0.08))
+                                .clipShape(Circle())
+                        }
+                        
+                        // Next track button
+                        Button(action: {
+                            playNextTrack()
+                        }) {
+                            Image(systemName: "forward.fill")
+                                .font(.title3)
+                                .foregroundColor(hasNextTrack ? .white.opacity(0.8) : .white.opacity(0.4))
+                                .frame(width: 45, height: 45)
                                 .background(Color.white.opacity(0.1))
                                 .clipShape(Circle())
                         }
+                        .disabled(!hasNextTrack)
                     }
                     
-                    // Playback speed control
-                    VStack(spacing: 6) {
+                    // Speed control section
+                    VStack(spacing: 10) {
+                        // Speed control title
                         Text(languageManager.currentLanguage == .spanish ? "Velocidad" : "Speed")
                             .font(.caption)
                             .foregroundColor(.white.opacity(0.8))
                         
-                        HStack(spacing: 12) {
-                            Text("0.5×")
-                                .font(.caption2)
-                                .foregroundColor(.white.opacity(0.6))
+                        // Speed slider
+                        VStack(spacing: 4) {
+                            HStack(spacing: 8) {
+                                Text("0.5×")
+                                    .font(.caption2)
+                                    .foregroundColor(.white.opacity(0.6))
+                                
+                                Slider(value: $playbackSpeed, in: 0.5...1.0, step: 0.1)
+                                    .accentColor(accentColor)
+                                    .onChange(of: playbackSpeed) { newValue in
+                                        audioManager.setPlaybackRate(Float(newValue))
+                                    }
+                                
+                                Text("1.0×")
+                                    .font(.caption2)
+                                    .foregroundColor(.white.opacity(0.6))
+                            }
                             
-                            Slider(value: $playbackSpeed, in: 0.5...1.0, step: 0.1)
-                                .accentColor(accentColor)
-                                .onChange(of: playbackSpeed) { newValue in
-                                    audioManager.setPlaybackRate(Float(newValue))
-                                }
-                            
-                            Text("1.0×")
-                                .font(.caption2)
-                                .foregroundColor(.white.opacity(0.6))
+                            Text(String(format: "%.1f×", playbackSpeed))
+                                .font(.caption)
+                                .foregroundColor(accentColor)
                         }
-                        .padding(.horizontal, 30)
-                        
-                        Text(String(format: "%.1f×", playbackSpeed))
-                            .font(.subheadline)
-                            .foregroundColor(accentColor)
+                        .padding(.horizontal, 40)
                     }
                     .padding(.vertical, 8)
                     
-                    // Background music toggle
-                    Button(action: {
-                        audioManager.toggleBackgroundAudio()
-                    }) {
-                        HStack(spacing: 10) {
-                            Image(systemName: audioManager.isBackgroundPlaying ? "music.note.list" : "music.note")
-                                .font(.callout)
-                                .foregroundColor(.white)
-                            
-                            Text(languageManager.currentLanguage == .spanish ? "Música de Fondo" : "Background Music")
-                                .font(.caption)
-                                .foregroundColor(.white)
+                    // Background music section with navigation
+                    HStack(spacing: 15) {
+                        // Previous background track button (only show if multiple tracks available)
+                        if audioManager.hasMultipleBackgroundTracks {
+                            Button(action: {
+                                audioManager.playPreviousBackgroundTrack()
+                            }) {
+                                Image(systemName: "backward.fill")
+                                    .font(.title3)
+                                    .foregroundColor(audioManager.hasPreviousBackground ? .white.opacity(0.8) : .white.opacity(0.4))
+                                    .frame(width: 40, height: 40)
+                                    .background(Color.white.opacity(0.1))
+                                    .clipShape(Circle())
+                            }
+                            .disabled(!audioManager.hasPreviousBackground)
                         }
-                        .frame(width: 200, height: 40)
-                        .background(
-                            audioManager.isBackgroundPlaying ?
-                                LinearGradient(
-                                    gradient: Gradient(colors: [accentColor, accentColor.opacity(0.8)]),
-                                    startPoint: .topLeading,
-                                    endPoint: .bottomTrailing
-                                ) :
-                                LinearGradient(
-                                    gradient: Gradient(colors: [Color.white.opacity(0.2), Color.white.opacity(0.1)]),
-                                    startPoint: .topLeading,
-                                    endPoint: .bottomTrailing
-                                )
-                        )
-                        .cornerRadius(20)
-                        .shadow(color: audioManager.isBackgroundPlaying ? accentColor.opacity(0.3) : Color.clear, radius: 6, x: 0, y: 3)
+                        
+                        // Background music toggle
+                        Button(action: {
+                            audioManager.toggleBackgroundAudio()
+                        }) {
+                            VStack(spacing: 4) {
+                                HStack(spacing: 8) {
+                                    Image(systemName: audioManager.isBackgroundPlaying ? "music.note.list" : "music.note")
+                                        .font(.callout)
+                                        .foregroundColor(.white)
+                                    
+                                    Text(languageManager.currentLanguage == .spanish ? "Música de Fondo" : "Background Music")
+                                        .font(.caption)
+                                        .foregroundColor(.white)
+                                }
+                                
+                                // Show current background track name if multiple available
+                                if audioManager.hasMultipleBackgroundTracks && !audioManager.currentBackgroundTrackName.isEmpty {
+                                    Text(audioManager.currentBackgroundTrackName)
+                                        .font(.caption2)
+                                        .foregroundColor(.white.opacity(0.7))
+                                        .lineLimit(1)
+                                }
+                            }
+                            .frame(width: audioManager.hasMultipleBackgroundTracks ? 180 : 200, height: 40)
+                            .background(
+                                audioManager.isBackgroundPlaying ?
+                                    LinearGradient(
+                                        gradient: Gradient(colors: [accentColor, accentColor.opacity(0.8)]),
+                                        startPoint: .topLeading,
+                                        endPoint: .bottomTrailing
+                                    ) :
+                                    LinearGradient(
+                                        gradient: Gradient(colors: [Color.white.opacity(0.2), Color.white.opacity(0.1)]),
+                                        startPoint: .topLeading,
+                                        endPoint: .bottomTrailing
+                                    )
+                            )
+                            .cornerRadius(20)
+                            .shadow(color: audioManager.isBackgroundPlaying ? accentColor.opacity(0.3) : Color.clear, radius: 6, x: 0, y: 3)
+                        }
+                        
+                        // Next background track button (only show if multiple tracks available)
+                        if audioManager.hasMultipleBackgroundTracks {
+                            Button(action: {
+                                audioManager.playNextBackgroundTrack()
+                            }) {
+                                Image(systemName: "forward.fill")
+                                    .font(.title3)
+                                    .foregroundColor(audioManager.hasNextBackground ? .white.opacity(0.8) : .white.opacity(0.4))
+                                    .frame(width: 40, height: 40)
+                                    .background(Color.white.opacity(0.1))
+                                    .clipShape(Circle())
+                            }
+                            .disabled(!audioManager.hasNextBackground)
+                        }
                     }
                 }
                 .padding(.bottom, 30)
