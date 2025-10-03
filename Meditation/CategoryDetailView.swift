@@ -20,6 +20,19 @@ struct CategoryDetailView: View {
         }
     }
     
+    private func deleteFavorite(at offsets: IndexSet) {
+        for index in offsets {
+            let meditation = meditations[index]
+            favoritesManager.removeFavorite(meditation.uniqueId)
+        }
+    }
+    
+    private func clearAllFavorites() {
+        for meditation in meditations {
+            favoritesManager.removeFavorite(meditation.uniqueId)
+        }
+    }
+    
     var body: some View {
         ScrollView {
             VStack(spacing: 16) {
@@ -45,7 +58,26 @@ struct CategoryDetailView: View {
                     .padding(.top, 100)
                 } else {
                     ForEach(meditations) { meditation in
-                        MeditationCard(meditation: meditation, categoryColor: category.color, languageManager: languageManager, favoritesManager: favoritesManager)
+                        if category.type == .favorites {
+                            HStack {
+                                MeditationCard(meditation: meditation, categoryColor: category.color, languageManager: languageManager, favoritesManager: favoritesManager)
+                                
+                                // Remove from favorites button
+                                Button(action: {
+                                    favoritesManager.removeFavorite(meditation.uniqueId)
+                                }) {
+                                    Image(systemName: "heart.slash.fill")
+                                        .font(.title2)
+                                        .foregroundColor(.red)
+                                        .frame(width: 44, height: 44)
+                                        .background(Color.white.opacity(0.2))
+                                        .clipShape(Circle())
+                                }
+                                .padding(.trailing, 8)
+                            }
+                        } else {
+                            MeditationCard(meditation: meditation, categoryColor: category.color, languageManager: languageManager, favoritesManager: favoritesManager)
+                        }
                     }
                 }
             }
@@ -65,6 +97,17 @@ struct CategoryDetailView: View {
         .toolbarColorScheme(.dark, for: .navigationBar)
         .toolbarBackground(.clear, for: .navigationBar)
         .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
+        .toolbar {
+            if category.type == .favorites && !meditations.isEmpty {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button(action: clearAllFavorites) {
+                        Text(languageManager.currentLanguage == .spanish ? "Limpiar" : "Clear All")
+                            .font(.subheadline)
+                            .foregroundColor(.red)
+                    }
+                }
+            }
+        }
         .onAppear {
             let appearance = UINavigationBarAppearance()
             appearance.configureWithTransparentBackground()
