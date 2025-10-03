@@ -254,13 +254,13 @@ struct AudioPlayerView: View {
                                 .font(.caption2)
                                 .foregroundColor(.white.opacity(0.6))
                             
-                            Slider(value: $playbackSpeed, in: 0.5...2.0, step: 0.1)
+                            Slider(value: $playbackSpeed, in: 0.5...1.0, step: 0.1)
                                 .accentColor(accentColor)
                                 .onChange(of: playbackSpeed) { newValue in
                                     audioManager.setPlaybackRate(Float(newValue))
                                 }
                             
-                            Text("2.0×")
+                            Text("1.0×")
                                 .font(.caption2)
                                 .foregroundColor(.white.opacity(0.6))
                         }

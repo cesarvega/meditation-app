@@ -19,6 +19,7 @@ class AudioPlayerManager: NSObject, ObservableObject {
     private var audioPlayer: AVAudioPlayer?
     private var backgroundAudioPlayer: AVAudioPlayer?
     private var timer: Timer?
+    private var currentRate: Float = 1.0
     
     override init() {
         super.init()
@@ -146,6 +147,8 @@ class AudioPlayerManager: NSObject, ObservableObject {
             return
         }
         
+        player.enableRate = true
+        player.rate = currentRate
         player.play()
         isPlaying = true
         startTimer()
@@ -196,10 +199,26 @@ class AudioPlayerManager: NSObject, ObservableObject {
     }
     
     func setPlaybackRate(_ rate: Float) {
-        guard let player = audioPlayer else { return }
+        guard let player = audioPlayer else {
+            print("⚠️ Cannot set playback rate: no audio player")
+            return
+        }
+        
+        // Ensure rate is between 0.5 and 2.0 for AVAudioPlayer
+        let clampedRate = max(0.5, min(2.0, rate))
+        
+        // Save the rate
+        currentRate = clampedRate
+        
         player.enableRate = true
-        player.rate = rate
-        print("🎵 Playback rate set to: \(rate)x")
+        player.rate = clampedRate
+        
+        // If playing, ensure the rate is applied
+        if isPlaying {
+            player.play()
+        }
+        
+        print("🎵 Playback rate set to: \(clampedRate)x")
     }
     
     func loadBackgroundAudio() {
