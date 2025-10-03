@@ -25,11 +25,15 @@ class AudioPlayerManager: NSObject, ObservableObject {
     
     // Available background tracks
     private let backgroundTracks = [
-        "Dream of Light",
-        "Nature Sounds",
-        "Rain Drops",
-        "Ocean Waves",
-        "Forest Ambience"
+        "Celestial_Whispers",
+        "Cosmic_Journey",
+        "Ethereal_Waves",
+        "Heavenly_Breeze",
+        "Luminous_Dreams",
+        "Peaceful_Cosmos",
+        "Serene_Galaxy",
+        "Starlight_Meditation",
+        "Tranquil_Skies"
     ]
     
     var hasMultipleBackgroundTracks: Bool {
@@ -42,6 +46,18 @@ class AudioPlayerManager: NSObject, ObservableObject {
     
     var hasNextBackground: Bool {
         return currentBackgroundTrackIndex < backgroundTracks.count - 1
+    }
+    
+    // Get user-friendly name for display
+    var displayBackgroundTrackName: String {
+        return formatTrackNameForDisplay(currentBackgroundTrackName)
+    }
+    
+    // Convert filename to display name
+    private func formatTrackNameForDisplay(_ trackName: String) -> String {
+        return trackName
+            .replacingOccurrences(of: "_", with: " ")
+            .capitalized
     }
     
     override init() {
@@ -68,17 +84,17 @@ class AudioPlayerManager: NSObject, ObservableObject {
         print("   Without extension: \(fileNameWithoutExtension)")
         
         // Try to load from bundle with subdirectory path
-        // First try: audio/meditations/[category]/[filename]
-        print("🔍 Try 1: audio/meditations/\(categoryFolder)/\(fileNameWithoutExtension).mp3")
-        if let url = Bundle.main.url(forResource: fileNameWithoutExtension, withExtension: "mp3", subdirectory: "audio/meditations/\(categoryFolder)") {
+        // First try: resources/audio/meditations/[category]/[filename]
+        print("🔍 Try 1: resources/audio/meditations/\(categoryFolder)/\(fileNameWithoutExtension).mp3")
+        if let url = Bundle.main.url(forResource: fileNameWithoutExtension, withExtension: "mp3", subdirectory: "resources/audio/meditations/\(categoryFolder)") {
             print("✅ Found at: \(url.path)")
             loadAudioFromURL(url)
             return
         }
         
-        // Second try: Meditation/audio/meditations/[category]/[filename]
-        print("🔍 Try 2: Meditation/audio/meditations/\(categoryFolder)/\(fileNameWithoutExtension).mp3")
-        if let url = Bundle.main.url(forResource: fileNameWithoutExtension, withExtension: "mp3", subdirectory: "Meditation/audio/meditations/\(categoryFolder)") {
+        // Second try: Meditation/resources/audio/meditations/[category]/[filename]
+        print("🔍 Try 2: Meditation/resources/audio/meditations/\(categoryFolder)/\(fileNameWithoutExtension).mp3")
+        if let url = Bundle.main.url(forResource: fileNameWithoutExtension, withExtension: "mp3", subdirectory: "Meditation/resources/audio/meditations/\(categoryFolder)") {
             print("✅ Found at: \(url.path)")
             loadAudioFromURL(url)
             return
@@ -104,7 +120,7 @@ class AudioPlayerManager: NSObject, ObservableObject {
         
         self.error = "No audio loaded"
         print("❌ Audio file not found: \(fileName)")
-        print("   Searched in: audio/meditations/\(categoryFolder)/")
+        print("   Searched in: resources/audio/meditations/\(categoryFolder)/")
         print("   Make sure the file is added to the Xcode project with target membership")
     }
     
@@ -260,14 +276,14 @@ class AudioPlayerManager: NSObject, ObservableObject {
         
         print("🔍 Searching for background audio: \(trackName)")
         
-        // Try 1: audio/background-sound/[trackName].mp3
-        if let url = Bundle.main.url(forResource: trackName, withExtension: "mp3", subdirectory: "audio/background-sound") {
+        // Try 1: resources/audio/background-sound/[trackName].mp3
+        if let url = Bundle.main.url(forResource: trackName, withExtension: "mp3", subdirectory: "resources/audio/background-sound") {
             loadBackgroundAudioFromURL(url)
             return
         }
         
-        // Try 2: Just in audio folder
-        if let url = Bundle.main.url(forResource: trackName, withExtension: "mp3", subdirectory: "audio") {
+        // Try 2: Just in resources/audio folder
+        if let url = Bundle.main.url(forResource: trackName, withExtension: "mp3", subdirectory: "resources/audio") {
             loadBackgroundAudioFromURL(url)
             return
         }

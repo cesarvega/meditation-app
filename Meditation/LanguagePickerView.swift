@@ -46,7 +46,7 @@ struct LanguagePickerView: View {
                     .foregroundColor(.white)
                 }
             }
-            .toolbarBackground(.purple, for: .navigationBar)
+            .toolbarBackground(.cyan, for: .navigationBar)
             .toolbarBackgroundVisibility(.visible, for: .navigationBar)
         }
     }

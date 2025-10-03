@@ -8,9 +8,12 @@
 import SwiftUI
 
 struct ContentView: View {
+    @EnvironmentObject var authManager: AuthenticationManager
     @State private var languageManager = LanguageManager()
+    @State private var themeManager = ThemeManager()
     @State private var favoritesManager = FavoritesManager()
-    @State private var showLanguagePicker = false
+    @State private var showSettings = false
+    @State private var showLogoutAlert = false
     @State private var refreshID = UUID()
 
     var body: some View {
@@ -18,7 +21,7 @@ struct ContentView: View {
             ScrollView {
                 VStack(spacing: 16) {
                     ForEach(Category.allCategories) { category in
-                        NavigationLink(destination: CategoryDetailView(category: category, languageManager: languageManager, favoritesManager: favoritesManager)) {
+                        NavigationLink(destination: CategoryDetailView(category: category, languageManager: languageManager, themeManager: themeManager, favoritesManager: favoritesManager)) {
                             CategoryCard(category: category, languageManager: languageManager)
                         }
                         .buttonStyle(PlainButtonStyle())
@@ -45,7 +48,7 @@ struct ContentView: View {
                             .font(.title2)
                             .foregroundColor(.white)
                             .lineLimit(1)
-                        Text(languageManager.localizedString(.userName))
+                        Text(languageManager.userName(for: themeManager.currentTheme))
                             .font(.title)
                             .fontWeight(.bold)
                             .foregroundColor(.white)
@@ -60,10 +63,83 @@ struct ContentView: View {
                 }
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button(action: {
-                        showLanguagePicker = true
+                        showSettings = true
                     }) {
-                        Image(systemName: "globe")
+                        Image(systemName: "gearshape.fill")
                             .foregroundColor(.white)
+                    }
+                }
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Menu {
+                        if let user = authManager.currentUser {
+                            HStack {
+                                if let profileImageURL = user.profileImageURL,
+                                   let url = URL(string: profileImageURL) {
+                                    AsyncImage(url: url) { image in
+                                        image
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fill)
+                                    } placeholder: {
+                                        Circle()
+                                            .fill(Color.gray.opacity(0.3))
+                                    }
+                                    .frame(width: 32, height: 32)
+                                    .clipShape(Circle())
+                                } else {
+                                    // Use SF Symbol for demo user
+                                    Image(systemName: "person.circle.fill")
+                                        .font(.title2)
+                                        .foregroundColor(.blue)
+                                        .frame(width: 32, height: 32)
+                                }
+                                
+                                VStack(alignment: .leading) {
+                                    Text(user.name)
+                                        .font(.headline)
+                                    Text(user.email)
+                                        .font(.caption)
+                                        .foregroundColor(.secondary)
+                                }
+                            }
+                            Divider()
+                        }
+                        
+                        Button(action: {
+                            showLogoutAlert = true
+                        }) {
+                            Label("Sign Out", systemImage: "rectangle.portrait.and.arrow.right")
+                        }
+                    } label: {
+                        if let user = authManager.currentUser {
+                            if let profileImageURL = user.profileImageURL,
+                               let url = URL(string: profileImageURL) {
+                                AsyncImage(url: url) { image in
+                                    image
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fill)
+                                } placeholder: {
+                                    Circle()
+                                        .fill(Color.white.opacity(0.3))
+                                }
+                                .frame(width: 32, height: 32)
+                                .clipShape(Circle())
+                                .overlay(
+                                    Circle()
+                                        .stroke(Color.white, lineWidth: 2)
+                                )
+                            } else {
+                                // Use SF Symbol for demo user (no profile image URL)
+                                Image(systemName: "person.circle.fill")
+                                    .foregroundColor(.white)
+                                    .font(.title2)
+                                    .frame(width: 32, height: 32)
+                            }
+                        } else {
+                            // Fallback if no user
+                            Image(systemName: "person.circle.fill")
+                                .foregroundColor(.white)
+                                .font(.title2)
+                        }
                     }
                 }
             }
@@ -73,8 +149,18 @@ struct ContentView: View {
                 // Refresh toolbar when view appears
                 refreshID = UUID()
             }
-            .sheet(isPresented: $showLanguagePicker) {
-                LanguagePickerView(languageManager: languageManager)
+            .sheet(isPresented: $showSettings) {
+                SettingsView(languageManager: languageManager, themeManager: themeManager)
+            }
+            .alert("Sign Out", isPresented: $showLogoutAlert) {
+                Button("Cancel", role: .cancel) { }
+                Button("Sign Out", role: .destructive) {
+                    withAnimation(.easeInOut(duration: 0.3)) {
+                        authManager.signOut()
+                    }
+                }
+            } message: {
+                Text("Are you sure you want to sign out?")
             }
         }
     }
@@ -83,5 +169,6 @@ struct ContentView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
+            .environmentObject(AuthenticationManager())
     }
 }

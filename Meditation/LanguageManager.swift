@@ -54,6 +54,20 @@ class LanguageManager {
             return key.spanish
         }
     }
+    
+    // Get user name based on theme
+    func userName(for theme: AppTheme) -> String {
+        switch (currentLanguage, theme) {
+        case (.english, .pink):
+            return "Sophie Anderson"
+        case (.spanish, .pink):
+            return "Sofía Martínez"
+        case (.english, .lightBlue):
+            return "Jack Grealish"
+        case (.spanish, .lightBlue):
+            return "Carlos Rodríguez"
+        }
+    }
 }
 
 enum LocalizationKey {

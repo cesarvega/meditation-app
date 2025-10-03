@@ -11,6 +11,7 @@ struct AudioPlayerView: View {
     @State var meditation: Meditation
     let categoryColor: Color
     let languageManager: LanguageManager
+    let themeManager: ThemeManager
     let favoritesManager: FavoritesManager
     
     @StateObject private var audioManager = AudioPlayerManager()
@@ -69,8 +70,10 @@ struct AudioPlayerView: View {
         }
     }
     
-    // Pink accent color similar to the female character's shirt
-    private let accentColor = Color(red: 0.95, green: 0.75, blue: 0.85) // Soft pink/rose
+    // Use theme accent color
+    private var accentColor: Color {
+        themeManager.currentTheme.accentColor
+    }
     
     var progress: Double {
         audioManager.duration > 0 ? audioManager.currentTime / audioManager.duration : 0
@@ -123,7 +126,7 @@ struct AudioPlayerView: View {
                     Button(action: {
                         favoritesManager.toggleFavorite(meditation.uniqueId)
                     }) {
-                        Image(systemName: favoritesManager.isFavorite(meditation.uniqueId) ? "bookmark.fill" : "bookmark")
+                        Image(systemName: favoritesManager.isFavorite(meditation.uniqueId) ? "heart.fill" : "heart")
                             .font(.title2)
                             .foregroundColor(favoritesManager.isFavorite(meditation.uniqueId) ? accentColor : .white)
                             .frame(width: 44, height: 44)
@@ -134,7 +137,7 @@ struct AudioPlayerView: View {
                 
                 // Main content area
                 VStack(spacing: 20) {
-                    // Female meditation character
+                    // Meditation character (changes based on theme)
                     ZStack {
                         // Ambient glow effect
                         Circle()
@@ -152,8 +155,8 @@ struct AudioPlayerView: View {
                             .frame(width: 240, height: 240)
                             .blur(radius: 20)
                         
-                        // Female character image
-                        Image("female")
+                        // Character image (male for light blue theme, female for pink theme)
+                        Image(themeManager.currentTheme == .lightBlue ? "male" : "female")
                             .resizable()
                             .aspectRatio(contentMode: .fit)
                             .frame(width: 160, height: 160)
@@ -395,7 +398,7 @@ struct AudioPlayerView: View {
                                 
                                 // Show current background track name if multiple available
                                 if audioManager.hasMultipleBackgroundTracks && !audioManager.currentBackgroundTrackName.isEmpty {
-                                    Text(audioManager.currentBackgroundTrackName)
+                                    Text(audioManager.displayBackgroundTrackName)
                                         .font(.caption2)
                                         .foregroundColor(.white.opacity(0.7))
                                         .lineLimit(1)
@@ -557,10 +560,12 @@ struct AudioPlayerView_Previews: PreviewProvider {
                 imageName: "audio-art-1",
                 audioFileEN: "peaceful-drift-en.mp3",
                 audioFileES: "peaceful-drift-es.mp3",
-                category: .sleep
+                category: .sleep,
+                rating: 4.0
             ),
             categoryColor: .blue,
             languageManager: LanguageManager(),
+            themeManager: ThemeManager(),
             favoritesManager: FavoritesManager()
         )
     }

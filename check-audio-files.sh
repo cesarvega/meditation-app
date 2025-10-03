@@ -7,8 +7,8 @@ echo "🔍 Checking audio files in project..."
 echo ""
 
 # Check if audio directory exists
-if [ ! -d "Meditation/audio/meditations" ]; then
-    echo "❌ Error: Meditation/audio/meditations directory not found"
+if [ ! -d "Meditation/resources/audio/meditations" ]; then
+    echo "❌ Error: Meditation/resources/audio/meditations directory not found"
     echo "   Current directory: $(pwd)"
     exit 1
 fi
@@ -17,19 +17,19 @@ echo "📁 Current audio files in project:"
 echo ""
 
 # Find all mp3 files
-find Meditation/audio/meditations -name "*.mp3" -type f | while read file; do
+find Meditation/resources/audio/meditations -name "*.mp3" -type f | while read file; do
     echo "✅ $file"
 done
 
 echo ""
 echo "📋 Expected file structure:"
 echo ""
-echo "For Sleep meditations (in Meditation/audio/meditations/sleep/):"
+echo "For Sleep meditations (in Meditation/resources/audio/meditations/sleep/):"
 echo "  - night-ocean-waves-en.mp3"
 echo "  - night-ocean-waves-es.mp3"
 echo "  (or use placeholder audio files)"
 echo ""
-echo "For Stress Relief meditations (in Meditation/audio/meditations/stress-relief/):"
+echo "For Stress Relief meditations (in Meditation/resources/audio/meditations/stress-relief/):"
 echo "  ✅ mind-body-eng.mp3"
 echo "  ✅ mind-body-esp.mp3"
 echo ""
