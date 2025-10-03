@@ -34,9 +34,10 @@ struct CategoryDetailView: View {
     }
     
     var body: some View {
-        ScrollView {
-            VStack(spacing: 16) {
-                if category.type == .favorites && meditations.isEmpty {
+        Group {
+            if category.type == .favorites {
+                // Use List for favorites to enable swipe actions
+                if meditations.isEmpty {
                     // Show empty favorites message
                     VStack(spacing: 20) {
                         Image(systemName: "heart.slash")
@@ -55,34 +56,43 @@ struct CategoryDetailView: View {
                             .multilineTextAlignment(.center)
                             .padding(.horizontal, 40)
                     }
-                    .padding(.top, 100)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
                 } else {
-                    ForEach(meditations) { meditation in
-                        if category.type == .favorites {
-                            HStack {
-                                MeditationCard(meditation: meditation, categoryColor: category.color, languageManager: languageManager, favoritesManager: favoritesManager)
-                                
-                                // Remove from favorites button
-                                Button(action: {
-                                    favoritesManager.removeFavorite(meditation.uniqueId)
-                                }) {
-                                    Image(systemName: "heart.slash.fill")
-                                        .font(.title2)
-                                        .foregroundColor(.red)
-                                        .frame(width: 44, height: 44)
-                                        .background(Color.white.opacity(0.2))
-                                        .clipShape(Circle())
+                    List {
+                        ForEach(meditations) { meditation in
+                            MeditationCard(meditation: meditation, categoryColor: category.color, languageManager: languageManager, favoritesManager: favoritesManager)
+                                .listRowBackground(Color.clear)
+                                .listRowSeparator(.hidden)
+                                .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                                    Button(action: {
+                                        withAnimation(.easeInOut(duration: 0.3)) {
+                                            favoritesManager.removeFavorite(meditation.uniqueId)
+                                        }
+                                    }) {
+                                        Label(
+                                            languageManager.currentLanguage == .spanish ? "Eliminar" : "Delete",
+                                            systemImage: "heart.slash.fill"
+                                        )
+                                    }
+                                    .tint(.red)
                                 }
-                                .padding(.trailing, 8)
-                            }
-                        } else {
+                        }
+                    }
+                    .listStyle(PlainListStyle())
+                    .scrollContentBackground(.hidden)
+                }
+            } else {
+                // Use ScrollView for other categories
+                ScrollView {
+                    VStack(spacing: 16) {
+                        ForEach(meditations) { meditation in
                             MeditationCard(meditation: meditation, categoryColor: category.color, languageManager: languageManager, favoritesManager: favoritesManager)
                         }
                     }
+                    .padding(.top, 20)
+                    .padding(.bottom, 40)
                 }
             }
-            .padding(.top, 20)
-            .padding(.bottom, 40)
         }
         .background(
             Image("BackgroundImage")
