@@ -14,6 +14,7 @@ struct AudioPlayerView: View {
     
     @StateObject private var audioManager = AudioPlayerManager()
     @State private var playbackSpeed: Double = 1.0
+    @State private var isHovering: Bool = false
     @Environment(\.dismiss) private var dismiss
     
     // Pink accent color similar to the female character's shirt
@@ -119,6 +120,15 @@ struct AudioPlayerView: View {
                                     )
                             )
                             .shadow(color: accentColor.opacity(0.3), radius: 21, x: 0, y: 10)
+                    }
+                    .offset(y: isHovering ? -10 : 0)
+                    .animation(
+                        Animation.easeInOut(duration: 2.0)
+                            .repeatForever(autoreverses: true),
+                        value: isHovering
+                    )
+                    .onAppear {
+                        isHovering = true
                     }
                     
                     // Title and status
