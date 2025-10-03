@@ -10,8 +10,9 @@ import SwiftUI
 struct ContentView: View {
     @EnvironmentObject var authManager: AuthenticationManager
     @State private var languageManager = LanguageManager()
+    @State private var themeManager = ThemeManager()
     @State private var favoritesManager = FavoritesManager()
-    @State private var showLanguagePicker = false
+    @State private var showSettings = false
     @State private var showLogoutAlert = false
     @State private var refreshID = UUID()
 
@@ -20,7 +21,7 @@ struct ContentView: View {
             ScrollView {
                 VStack(spacing: 16) {
                     ForEach(Category.allCategories) { category in
-                        NavigationLink(destination: CategoryDetailView(category: category, languageManager: languageManager, favoritesManager: favoritesManager)) {
+                        NavigationLink(destination: CategoryDetailView(category: category, languageManager: languageManager, themeManager: themeManager, favoritesManager: favoritesManager)) {
                             CategoryCard(category: category, languageManager: languageManager)
                         }
                         .buttonStyle(PlainButtonStyle())
@@ -47,7 +48,7 @@ struct ContentView: View {
                             .font(.title2)
                             .foregroundColor(.white)
                             .lineLimit(1)
-                        Text(languageManager.localizedString(.userName))
+                        Text(languageManager.userName(for: themeManager.currentTheme))
                             .font(.title)
                             .fontWeight(.bold)
                             .foregroundColor(.white)
@@ -62,9 +63,9 @@ struct ContentView: View {
                 }
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button(action: {
-                        showLanguagePicker = true
+                        showSettings = true
                     }) {
-                        Image(systemName: "globe")
+                        Image(systemName: "gearshape.fill")
                             .foregroundColor(.white)
                     }
                 }
@@ -148,8 +149,8 @@ struct ContentView: View {
                 // Refresh toolbar when view appears
                 refreshID = UUID()
             }
-            .sheet(isPresented: $showLanguagePicker) {
-                LanguagePickerView(languageManager: languageManager)
+            .sheet(isPresented: $showSettings) {
+                SettingsView(languageManager: languageManager, themeManager: themeManager)
             }
             .alert("Sign Out", isPresented: $showLogoutAlert) {
                 Button("Cancel", role: .cancel) { }

@@ -11,6 +11,7 @@ struct MeditationCard: View {
     let meditation: Meditation
     let categoryColor: Color
     let languageManager: LanguageManager
+    let themeManager: ThemeManager
     let favoritesManager: FavoritesManager
     
     var body: some View {
@@ -18,6 +19,7 @@ struct MeditationCard: View {
             meditation: meditation,
             categoryColor: categoryColor,
             languageManager: languageManager,
+            themeManager: themeManager,
             favoritesManager: favoritesManager
         )) {
             HStack(spacing: 16) {
@@ -40,10 +42,10 @@ struct MeditationCard: View {
                         .fontWeight(.bold)
                         .foregroundColor(.primary)
                     
-                    // Star rating
+                    // Star rating (dynamic based on meditation rating)
                     HStack(spacing: 4) {
-                        ForEach(0..<4) { _ in
-                            Image(systemName: "star.fill")
+                        ForEach(0..<5) { index in
+                            Image(systemName: starIcon(for: index, rating: meditation.rating))
                                 .font(.caption)
                                 .foregroundColor(.yellow)
                         }
@@ -64,5 +66,17 @@ struct MeditationCard: View {
             .padding(.horizontal, 16)
         }
         .buttonStyle(PlainButtonStyle()) // Remove default button styling
+    }
+    
+    // Helper function to determine star icon based on rating
+    private func starIcon(for index: Int, rating: Double) -> String {
+        let position = Double(index) + 1.0
+        if rating >= position {
+            return "star.fill"
+        } else if rating >= position - 0.5 {
+            return "star.leadinghalf.filled"
+        } else {
+            return "star"
+        }
     }
 }

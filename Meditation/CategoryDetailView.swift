@@ -10,6 +10,7 @@ import SwiftUI
 struct CategoryDetailView: View {
     let category: Category
     let languageManager: LanguageManager
+    let themeManager: ThemeManager
     let favoritesManager: FavoritesManager
     
     var meditations: [Meditation] {
@@ -60,7 +61,7 @@ struct CategoryDetailView: View {
                 } else {
                     List {
                         ForEach(meditations) { meditation in
-                            MeditationCard(meditation: meditation, categoryColor: category.color, languageManager: languageManager, favoritesManager: favoritesManager)
+                            MeditationCard(meditation: meditation, categoryColor: category.color, languageManager: languageManager, themeManager: themeManager, favoritesManager: favoritesManager)
                                 .listRowBackground(Color.clear)
                                 .listRowSeparator(.hidden)
                                 .swipeActions(edge: .trailing, allowsFullSwipe: true) {
@@ -86,7 +87,7 @@ struct CategoryDetailView: View {
                 ScrollView {
                     VStack(spacing: 16) {
                         ForEach(meditations) { meditation in
-                            MeditationCard(meditation: meditation, categoryColor: category.color, languageManager: languageManager, favoritesManager: favoritesManager)
+                            MeditationCard(meditation: meditation, categoryColor: category.color, languageManager: languageManager, themeManager: themeManager, favoritesManager: favoritesManager)
                         }
                     }
                     .padding(.top, 20)

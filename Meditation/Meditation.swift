@@ -18,6 +18,7 @@ struct Meditation: Identifiable {
     let audioFileEN: String
     let audioFileES: String
     let category: CategoryType
+    let rating: Double // Rating out of 5 stars (e.g., 4.0, 4.5)
     
     func title(languageManager: LanguageManager) -> String {
         languageManager.currentLanguage == .spanish ? titleES : titleEN
@@ -59,7 +60,8 @@ struct Meditation: Identifiable {
                     imageName: "audio-art-1",
                     audioFileEN: "peaceful-drift-en.mp3",
                     audioFileES: "peaceful-drift-es.mp3",
-                    category: .sleep
+                    category: .sleep,
+                    rating: 4.5
                 ),
                 Meditation(
                     uniqueId: "night-ocean-waves",
@@ -70,7 +72,8 @@ struct Meditation: Identifiable {
                     imageName: "audio-art-2",
                     audioFileEN: "night-ocean-waves-en.mp3",
                     audioFileES: "night-ocean-waves-es.mp3",
-                    category: .sleep
+                    category: .sleep,
+                    rating: 4.0
                 ),
                 Meditation(
                     uniqueId: "release-the-day",
@@ -81,7 +84,8 @@ struct Meditation: Identifiable {
                     imageName: "audio-art-3",
                     audioFileEN: "release-the-day-en.mp3",
                     audioFileES: "release-the-day-es.mp3",
-                    category: .sleep
+                    category: .sleep,
+                    rating: 4.8
                 )
             ]
             
@@ -96,7 +100,8 @@ struct Meditation: Identifiable {
                     imageName: "audio-art-4",
                     audioFileEN: "mind-body-eng.mp3",
                     audioFileES: "mind-body-esp.mp3",
-                    category: .stressRelief
+                    category: .stressRelief,
+                    rating: 4.2
                 ),
                 Meditation(
                     uniqueId: "melting-the-pressure",
@@ -107,7 +112,8 @@ struct Meditation: Identifiable {
                     imageName: "audio-art-5",
                     audioFileEN: "mind-body-eng.mp3",
                     audioFileES: "mind-body-esp.mp3",
-                    category: .stressRelief
+                    category: .stressRelief,
+                    rating: 4.6
                 ),
                 Meditation(
                     uniqueId: "quiet-center",
@@ -118,7 +124,8 @@ struct Meditation: Identifiable {
                     imageName: "audio-art-6",
                     audioFileEN: "mind-body-eng.mp3",
                     audioFileES: "mind-body-esp.mp3",
-                    category: .stressRelief
+                    category: .stressRelief,
+                    rating: 4.3
                 )
             ]
             
@@ -133,7 +140,8 @@ struct Meditation: Identifiable {
                     imageName: "audio-art-7",
                     audioFileEN: "calm-in-the-storm-en.mp3",
                     audioFileES: "calm-in-the-storm-es.mp3",
-                    category: .anxiety
+                    category: .anxiety,
+                    rating: 4.7
                 ),
                 Meditation(
                     uniqueId: "ground-and-breathe",
@@ -144,7 +152,8 @@ struct Meditation: Identifiable {
                     imageName: "audio-art-8",
                     audioFileEN: "ground-and-breathe-en.mp3",
                     audioFileES: "ground-and-breathe-es.mp3",
-                    category: .anxiety
+                    category: .anxiety,
+                    rating: 4.4
                 ),
                 Meditation(
                     uniqueId: "soft-heart-steady-mind",
@@ -155,7 +164,8 @@ struct Meditation: Identifiable {
                     imageName: "audio-art-9",
                     audioFileEN: "soft-heart-steady-mind-en.mp3",
                     audioFileES: "soft-heart-steady-mind-es.mp3",
-                    category: .anxiety
+                    category: .anxiety,
+                    rating: 4.9
                 )
             ]
             
@@ -170,7 +180,8 @@ struct Meditation: Identifiable {
                     imageName: "audio-art-10",
                     audioFileEN: "clear-the-fog-en.mp3",
                     audioFileES: "clear-the-fog-es.mp3",
-                    category: .focus
+                    category: .focus,
+                    rating: 4.1
                 ),
                 Meditation(
                     uniqueId: "laser-focus",
@@ -181,7 +192,8 @@ struct Meditation: Identifiable {
                     imageName: "audio-art-11",
                     audioFileEN: "laser-focus-en.mp3",
                     audioFileES: "laser-focus-es.mp3",
-                    category: .focus
+                    category: .focus,
+                    rating: 4.5
                 ),
                 Meditation(
                     uniqueId: "present-power",
@@ -192,7 +204,8 @@ struct Meditation: Identifiable {
                     imageName: "audio-art-12",
                     audioFileEN: "present-power-en.mp3",
                     audioFileES: "present-power-es.mp3",
-                    category: .focus
+                    category: .focus,
+                    rating: 4.3
                 )
             ]
             
@@ -207,7 +220,8 @@ struct Meditation: Identifiable {
                     imageName: "audio-art-13",
                     audioFileEN: "grateful-heart-en.mp3",
                     audioFileES: "grateful-heart-es.mp3",
-                    category: .gratitude
+                    category: .gratitude,
+                    rating: 4.8
                 ),
                 Meditation(
                     uniqueId: "seeds-of-joy",
@@ -218,7 +232,8 @@ struct Meditation: Identifiable {
                     imageName: "audio-art-14",
                     audioFileEN: "seeds-of-joy-en.mp3",
                     audioFileES: "seeds-of-joy-es.mp3",
-                    category: .gratitude
+                    category: .gratitude,
+                    rating: 4.6
                 ),
                 Meditation(
                     uniqueId: "circle-of-thanks",
@@ -229,7 +244,8 @@ struct Meditation: Identifiable {
                     imageName: "audio-art-15",
                     audioFileEN: "circle-of-thanks-en.mp3",
                     audioFileES: "circle-of-thanks-es.mp3",
-                    category: .gratitude
+                    category: .gratitude,
+                    rating: 4.7
                 )
             ]
         }
