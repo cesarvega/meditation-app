@@ -112,6 +112,7 @@
 			);
 			name = Meditation;
 			packageProductDependencies = (
+				C05D7BB02E8F7BC800B5178B /* GoogleSignIn */,
 			);
 			productName = "Fortune-Teller";
 			productReference = C01FA37D2E8362F200B35F36 /* Meditation.app */;
@@ -195,6 +196,9 @@
 			);
 			mainGroup = C01FA3742E8362F200B35F36;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				C05D7BAF2E8F7BC800B5178B /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = C01FA37E2E8362F200B35F36 /* Products */;
 			projectDirPath = "";
@@ -405,6 +409,14 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_CFBundleURLTypes = (
+					{
+						CFBundleURLName = "GoogleSignIn";
+						CFBundleURLSchemes = (
+							"com.googleusercontent.apps.your-reversed-client-id",
+						);
+					},
+				);
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -433,6 +445,14 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_CFBundleURLTypes = (
+					{
+						CFBundleURLName = "GoogleSignIn";
+						CFBundleURLSchemes = (
+							"com.googleusercontent.apps.your-reversed-client-id",
+						);
+					},
+				);
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -558,6 +578,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		C05D7BAF2E8F7BC800B5178B /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/google/GoogleSignIn-iOS";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 9.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		C05D7BB02E8F7BC800B5178B /* GoogleSignIn */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C05D7BAF2E8F7BC800B5178B /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignIn;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = C01FA3752E8362F200B35F36 /* Project object */;
 }
