@@ -16,15 +16,15 @@ fi
 
 # List the audio files we want to add
 echo "📁 Background audio files to add:"
-ls -la "Meditation/audio/background-sound/"*.mp3
+ls -la "Meditation/resources/audio/background-sound/"*.mp3
 
 # Open Xcode project to add files manually
 echo ""
 echo "🔧 To add these files to your Xcode project:"
 echo "1. Open Meditation.xcodeproj in Xcode"
-echo "2. Right-click on the 'audio/background-sound' folder in the project navigator"
+echo "2. Right-click on the 'resources/audio/background-sound' folder in the project navigator"
 echo "3. Select 'Add Files to Meditation...'"
-echo "4. Navigate to: Meditation/audio/background-sound/"
+echo "4. Navigate to: Meditation/resources/audio/background-sound/"
 echo "5. Select all .mp3 files and click 'Add'"
 echo "6. Make sure 'Add to target: Meditation' is checked"
 echo ""

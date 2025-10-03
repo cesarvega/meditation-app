@@ -42,7 +42,7 @@ struct Meditation: Identifiable {
         case .focus: categoryFolder = "focus"
         case .gratitude: categoryFolder = "gratitude"
         }
-        return "audio/meditations/\(categoryFolder)/\(audioFile(languageManager: languageManager))"
+        return "resources/audio/meditations/\(categoryFolder)/\(audioFile(languageManager: languageManager))"
     }
     
     static func meditations(for category: CategoryType) -> [Meditation] {
