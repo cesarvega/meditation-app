@@ -108,6 +108,44 @@ struct SettingsView: View {
                     Text(languageManager.currentLanguage == .spanish ? "Tema" : "Theme")
                         .font(.headline)
                 }
+                
+                // Avatar Section
+                Section {
+                    ForEach(AvatarStyle.allCases) { avatar in
+                        Button(action: {
+                            themeManager.currentAvatar = avatar
+                        }) {
+                            HStack(spacing: 12) {
+                                Image(avatar.imageName)
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                                    .frame(width: 40, height: 40)
+                                    .clipShape(Circle())
+                                    .overlay(
+                                        Circle()
+                                            .stroke(Color.gray.opacity(0.2), lineWidth: 1)
+                                    )
+                                
+                                Text(languageManager.currentLanguage == .spanish ?
+                                     avatar.displayNameSpanish : avatar.displayNameEnglish)
+                                    .font(.body)
+                                    .foregroundColor(.primary)
+                                
+                                Spacer()
+                                
+                                if themeManager.currentAvatar == avatar {
+                                    Image(systemName: "checkmark")
+                                        .foregroundColor(themeManager.currentTheme.accentColor)
+                                        .fontWeight(.bold)
+                                }
+                            }
+                            .padding(.vertical, 4)
+                        }
+                    }
+                } header: {
+                    Text(languageManager.currentLanguage == .spanish ? "Avatar" : "Avatar")
+                        .font(.headline)
+                }
             }
             .navigationTitle(languageManager.currentLanguage == .spanish ? "Configuración" : "Settings")
             .navigationBarTitleDisplayMode(.inline)

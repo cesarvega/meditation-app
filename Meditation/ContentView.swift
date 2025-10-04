@@ -62,15 +62,15 @@ struct ContentView: View {
                         }
                         .padding(.top, 6)
                         .padding(.bottom, 26)
-                    }
-                    .scrollContentBackground(.hidden)
-                    .padding(.top, adjustedTop + headerHeight)
-                    .zIndex(1)
-                }
             }
-            .navigationTitle("")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
+            .scrollContentBackground(.hidden)
+            .padding(.top, adjustedTop + headerHeight)
+            .zIndex(1)
+        }
+        }
+        .navigationTitle("")
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button(action: {
                         showSettings = true
@@ -152,18 +152,22 @@ struct ContentView: View {
                         }
                     }
                 }
-            }
-            .toolbarBackground(.clear, for: .navigationBar)
-            .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
-            .onAppear {
-                // Refresh toolbar when view appears
-                refreshID = UUID()
-            }
-            .sheet(isPresented: $showSettings) {
-                SettingsView(languageManager: languageManager, themeManager: themeManager)
-            }
-            .alert("Sign Out", isPresented: $showLogoutAlert) {
-                Button("Cancel", role: .cancel) { }
+        }
+        .toolbarBackground(.clear, for: .navigationBar)
+        .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
+        .onAppear {
+            // Refresh toolbar when view appears
+            refreshID = UUID()
+            NotificationManager.shared.scheduleDailyMeditationNotifications(language: languageManager.currentLanguage)
+        }
+        .onChange(of: languageManager.currentLanguage) { newLanguage in
+            NotificationManager.shared.scheduleDailyMeditationNotifications(language: newLanguage)
+        }
+        .sheet(isPresented: $showSettings) {
+            SettingsView(languageManager: languageManager, themeManager: themeManager)
+        }
+        .alert("Sign Out", isPresented: $showLogoutAlert) {
+            Button("Cancel", role: .cancel) { }
                 Button("Sign Out", role: .destructive) {
                     withAnimation(.easeInOut(duration: 0.3)) {
                         authManager.signOut()
