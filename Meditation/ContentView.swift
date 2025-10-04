@@ -18,37 +18,25 @@ struct ContentView: View {
 
     var body: some View {
         NavigationStack {
-            ScrollView {
-                VStack(spacing: 16) {
-                    ForEach(Category.allCategories) { category in
-                        NavigationLink(destination: CategoryDetailView(category: category, languageManager: languageManager, themeManager: themeManager, favoritesManager: favoritesManager)) {
-                            CategoryCard(category: category, languageManager: languageManager)
-                        }
-                        .buttonStyle(PlainButtonStyle())
-                    }
-                }
-                .padding(.top, 20)
-                .padding(.bottom, 40)
-            }
-            .scrollContentBackground(.hidden)
-            .background(
-                Image("BackgroundImage")
-                    .resizable()
-                    .scaledToFill()
-                    .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
-                    .clipped()
-                    .ignoresSafeArea(.all)
-            )
-            .navigationTitle("")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .principal) {
+            GeometryReader { proxy in
+                let safeTop = proxy.safeAreaInsets.top
+                let adjustedTop = max(safeTop - 106, 0)
+                let headerHeight: CGFloat = 84
+                
+                ZStack(alignment: .top) {
+                    Image("BackgroundImage")
+                        .resizable()
+                        .scaledToFill()
+                        .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
+                        .clipped()
+                        .ignoresSafeArea(.all)
+
                     VStack(spacing: 2) {
                         Text(languageManager.localizedString(.welcome))
                             .font(.title2)
                             .foregroundColor(.white)
                             .lineLimit(1)
-                        Text(languageManager.userName(for: themeManager.currentTheme))
+                        Text(authManager.currentUser?.name ?? languageManager.userName(for: themeManager.currentTheme))
                             .font(.title)
                             .fontWeight(.bold)
                             .foregroundColor(.white)
@@ -57,10 +45,32 @@ struct ContentView: View {
                             .fixedSize(horizontal: false, vertical: true)
                             .frame(maxWidth: 280)
                     }
-                    .frame(height: 80)
-                    .padding(.top, 30)
+                    .padding(.top, adjustedTop)
+                    .padding(.bottom, 4)
+                    .frame(maxWidth: .infinity)
+                    .background(Color.clear)
                     .id(refreshID)
+
+                    ScrollView {
+                        VStack(spacing: 16) {
+                            ForEach(Category.allCategories) { category in
+                                NavigationLink(destination: CategoryDetailView(category: category, languageManager: languageManager, themeManager: themeManager, favoritesManager: favoritesManager)) {
+                                    CategoryCard(category: category, languageManager: languageManager)
+                                }
+                                .buttonStyle(PlainButtonStyle())
+                            }
+                        }
+                        .padding(.top, 6)
+                        .padding(.bottom, 26)
+                    }
+                    .scrollContentBackground(.hidden)
+                    .padding(.top, adjustedTop + headerHeight)
+                    .zIndex(1)
                 }
+            }
+            .navigationTitle("")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button(action: {
                         showSettings = true

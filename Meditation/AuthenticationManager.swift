@@ -59,7 +59,7 @@ class AuthenticationManager: ObservableObject {
     
     // MARK: - User Profile Management
     func updateUserName(_ newName: String) {
-        guard var user = currentUser, !newName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+        guard let user = currentUser, !newName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
             return
         }
         
@@ -120,6 +120,12 @@ class AuthenticationManager: ObservableObject {
                     self.errorMessage = "Enterprise Mobility Management error"
                 case .keychain:
                     self.errorMessage = "Keychain error occurred"
+                case .hasNoAuthInKeychain:
+                    self.errorMessage = "No stored authorization found in keychain"
+                case .scopesAlreadyGranted:
+                    self.errorMessage = "Requested scopes were already granted"
+                case .mismatchWithCurrentUser:
+                    self.errorMessage = "Sign-in mismatch with current user"
                 case .unknown:
                     self.errorMessage = "Unknown Google Sign-In error"
                 @unknown default:

@@ -1,7 +1,15 @@
 {
   "colors" : [
     {
-      "filename" : "Icon-App-1024x1024.png",
+      "color" : {
+        "color-space" : "srgb",
+        "components" : {
+          "alpha" : "1.000",
+          "blue" : "0.275",
+          "green" : "0.514",
+          "red" : "0.204"
+        }
+      },
       "idiom" : "universal"
     }
   ],

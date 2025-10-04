@@ -347,7 +347,7 @@ struct AudioPlayerView: View {
                                 
                                 Slider(value: $playbackSpeed, in: 0.5...1.0, step: 0.1)
                                     .accentColor(accentColor)
-                                    .onChange(of: playbackSpeed) { newValue in
+                                    .onChange(of: playbackSpeed) { oldValue, newValue in
                                         audioManager.setPlaybackRate(Float(newValue))
                                     }
                                 
