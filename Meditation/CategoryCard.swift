@@ -14,21 +14,19 @@ struct CategoryCard: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             // Header section with category name and "1 to 10"
-            HStack {
-                HStack(spacing: 8) {
-                    Circle()
-                        .fill(category.type == .favorites ? Color.blue.opacity(0.6) : category.color)
-                        .frame(width: 8, height: 8)
-                    
-                    Text(category.name(languageManager: languageManager))
-                        .font(.headline)
-                        .foregroundColor(.white)
-                        .lineLimit(2)
-                        .fixedSize(horizontal: false, vertical: true)
-                }
-                
+            HStack(spacing: 12) {
+                Circle()
+                    .fill(category.type == .favorites ? Color.blue.opacity(0.6) : category.color)
+                    .frame(width: 8, height: 8)
+
+                Text(category.name(languageManager: languageManager))
+                    .font(.headline)
+                    .foregroundColor(.primary)
+                    .lineLimit(1)
+                    .truncationMode(.tail)
+
                 Spacer()
-                
+
                 Text("1 to 10")
                     .font(.subheadline)
                     .foregroundColor(.gray)

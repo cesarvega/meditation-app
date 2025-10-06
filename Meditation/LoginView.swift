@@ -181,6 +181,14 @@ struct LoginView: View {
                     authManager.errorMessage = "Apple Sign-In failed: Not handled"
                 case .failed:
                     authManager.errorMessage = "Apple Sign-In failed: Authentication failed"
+                case .notInteractive:
+                    authManager.errorMessage = "Apple Sign-In failed: Not interactive"
+                case .matchedExcludedCredential:
+                    authManager.errorMessage = "Apple Sign-In failed: Matched excluded credential"
+                case .credentialImport:
+                    authManager.errorMessage = "Apple Sign-In failed: Credential import error"
+                case .credentialExport:
+                    authManager.errorMessage = "Apple Sign-In failed: Credential export error"
                 @unknown default:
                     authManager.errorMessage = "Apple Sign-In failed: \(error.localizedDescription)"
                 }

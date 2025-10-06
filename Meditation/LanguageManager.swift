@@ -66,6 +66,10 @@ class LanguageManager {
             return "Jack Grealish"
         case (.spanish, .lightBlue):
             return "Carlos Rodríguez"
+        case (.english, .purple):
+            return "Ava Thompson"
+        case (.spanish, .purple):
+            return "Valentina Morales"
         }
     }
 }

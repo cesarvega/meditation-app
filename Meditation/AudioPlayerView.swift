@@ -155,8 +155,8 @@ struct AudioPlayerView: View {
                             .frame(width: 240, height: 240)
                             .blur(radius: 20)
                         
-                        // Character image (male for light blue theme, female for pink theme)
-                        Image(themeManager.currentTheme == .lightBlue ? "male" : "female")
+                        // Character image (selected in settings)
+                        Image(themeManager.currentAvatar.imageName)
                             .resizable()
                             .aspectRatio(contentMode: .fit)
                             .frame(width: 160, height: 160)
@@ -347,7 +347,7 @@ struct AudioPlayerView: View {
                                 
                                 Slider(value: $playbackSpeed, in: 0.5...1.0, step: 0.1)
                                     .accentColor(accentColor)
-                                    .onChange(of: playbackSpeed) { newValue in
+                                    .onChange(of: playbackSpeed) { oldValue, newValue in
                                         audioManager.setPlaybackRate(Float(newValue))
                                     }
                                 
@@ -385,26 +385,22 @@ struct AudioPlayerView: View {
                         Button(action: {
                             audioManager.toggleBackgroundAudio()
                         }) {
-                            VStack(spacing: 4) {
-                                HStack(spacing: 8) {
-                                    Image(systemName: audioManager.isBackgroundPlaying ? "music.note.list" : "music.note")
-                                        .font(.callout)
-                                        .foregroundColor(.white)
-                                    
-                                    Text(languageManager.currentLanguage == .spanish ? "Música de Fondo" : "Background Music")
-                                        .font(.caption)
-                                        .foregroundColor(.white)
-                                }
+                            HStack(spacing: 10) {
+                                Image(systemName: audioManager.isBackgroundPlaying ? "music.note.list" : "music.note")
+                                    .font(.callout)
+                                    .foregroundColor(.white)
                                 
-                                // Show current background track name if multiple available
-                                if audioManager.hasMultipleBackgroundTracks && !audioManager.currentBackgroundTrackName.isEmpty {
-                                    Text(audioManager.displayBackgroundTrackName)
-                                        .font(.caption2)
-                                        .foregroundColor(.white.opacity(0.7))
-                                        .lineLimit(1)
-                                }
+                                Text(
+                                    audioManager.displayBackgroundTrackName.isEmpty ?
+                                    (languageManager.currentLanguage == .spanish ? "Audio de fondo" : "Background audio") :
+                                    audioManager.displayBackgroundTrackName
+                                )
+                                .font(.caption)
+                                .foregroundColor(.white)
+                                .lineLimit(1)
+                                .truncationMode(.tail)
                             }
-                            .frame(width: audioManager.hasMultipleBackgroundTracks ? 180 : 200, height: 40)
+                            .frame(width: 200, height: 40)
                             .background(
                                 audioManager.isBackgroundPlaying ?
                                     LinearGradient(

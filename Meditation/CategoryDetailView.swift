@@ -12,6 +12,7 @@ struct CategoryDetailView: View {
     let languageManager: LanguageManager
     let themeManager: ThemeManager
     let favoritesManager: FavoritesManager
+    @Environment(\.presentationMode) var presentationMode
     
     var meditations: [Meditation] {
         if category.type == .favorites {
@@ -103,12 +104,31 @@ struct CategoryDetailView: View {
                 .clipped()
                 .ignoresSafeArea(.all)
         )
-        .navigationTitle(category.name(languageManager: languageManager))
-        .navigationBarTitleDisplayMode(.large)
+    // Use a custom inline title with back button so title appears on the same line as the back button
+    .navigationBarTitleDisplayMode(.large)
+    .navigationBarBackButtonHidden(true)
         .toolbarColorScheme(.dark, for: .navigationBar)
         .toolbarBackground(.clear, for: .navigationBar)
         .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
         .toolbar {
+            // Leading custom back button + inline title
+            ToolbarItem(placement: .navigationBarLeading) {
+                HStack(spacing: 12) {
+                    Button(action: {
+                        presentationMode.wrappedValue.dismiss()
+                    }) {
+                        Image(systemName: "chevron.left")
+                            .font(.system(size: 18, weight: .semibold))
+                            .foregroundColor(.white)
+                    }
+
+                    Text(category.name(languageManager: languageManager))
+                        .font(.headline)
+                        .foregroundColor(.white)
+                        .lineLimit(1)
+                }
+            }
+
             if category.type == .favorites && !meditations.isEmpty {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: clearAllFavorites) {
