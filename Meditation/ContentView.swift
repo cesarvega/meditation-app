@@ -15,7 +15,6 @@ struct ContentView: View {
     @State private var showSettings = false
     @State private var refreshID = UUID()
     @State private var navigationPath = NavigationPath()
-    @State private var selectedMeditationId: String?
 
     var body: some View {
         NavigationStack(path: $navigationPath) {
@@ -31,6 +30,22 @@ struct ContentView: View {
                         .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
                         .clipped()
                         .ignoresSafeArea(.all)
+
+                    HStack {
+                        Button {
+                            showSettings = true
+                        } label: {
+                            Image(systemName: "gearshape.fill")
+                                .foregroundColor(.white)
+                                .padding(10)
+                                .background(Color.black.opacity(0.25))
+                                .clipShape(Circle())
+                        }
+                        Spacer()
+                    }
+                    .padding(.top, adjustedTop + 12)
+                    .padding(.horizontal, 20)
+                    .zIndex(2)
 
                     VStack(spacing: 2) {
                         Text(languageManager.localizedString(.welcome))
@@ -56,31 +71,34 @@ struct ContentView: View {
                         VStack(spacing: 16) {
                             ForEach(Category.allCategories) { category in
                                 NavigationLink(value: category) {
-                                    CategoryCard(category: category, languageManager: languageManager)
+                                    CategoryCard(
+                                        category: category,
+                                        languageManager: languageManager,
+                                        meditationCount: meditationCount(for: category)
+                                    )
                                 }
                                 .buttonStyle(PlainButtonStyle())
                             }
                         }
                         .padding(.top, 6)
                         .padding(.bottom, 26)
+                    }
+                    .scrollContentBackground(.hidden)
+                    .padding(.top, adjustedTop + headerHeight)
+                    .zIndex(1)
+                }
             }
-            .scrollContentBackground(.hidden)
-            .padding(.top, adjustedTop + headerHeight)
-            .zIndex(1)
-        }
+            .navigationDestination(for: Category.self) { category in
+                CategoryDetailView(
+                    category: category,
+                    languageManager: languageManager,
+                    themeManager: themeManager,
+                    favoritesManager: favoritesManager
+                )
+            }
         }
         .navigationTitle("")
         .navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button(action: {
-                        showSettings = true
-                    }) {
-                        Image(systemName: "gearshape.fill")
-                            .foregroundColor(.white)
-                    }
-                }
-        }
         .toolbarBackground(.clear, for: .navigationBar)
         .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
         .onAppear {
@@ -99,10 +117,6 @@ struct ContentView: View {
                 handleDeepLink(meditationId: meditationId)
             }
         }
-        .navigationDestination(for: Category.self) { category in
-            CategoryDetailView(category: category, languageManager: languageManager, themeManager: themeManager, favoritesManager: favoritesManager)
-        }
-        }
     }
 
     private func handleDeepLink(meditationId: String) {
@@ -112,11 +126,26 @@ struct ContentView: View {
         let category = Category.allCategories.first { $0.type == meditation.category }
 
         if let category = category {
-            // Navigate to the category
-            navigationPath.append(category)
+            openCategory(category, meditationId: meditationId)
+        }
+    }
 
-            // Store the meditation ID to be handled by CategoryDetailView
-            selectedMeditationId = meditationId
+    private func openCategory(_ category: Category, meditationId: String? = nil) {
+        var newPath = NavigationPath()
+        newPath.append(category)
+        if let meditationId,
+           let meditation = Meditation.meditation(withId: meditationId) {
+            newPath.append(meditation)
+        }
+        navigationPath = newPath
+    }
+
+    private func meditationCount(for category: Category) -> Int {
+        switch category.type {
+        case .favorites:
+            return Meditation.favoritesMeditations(favoritesManager: favoritesManager).count
+        default:
+            return Meditation.meditations(for: category.type).count
         }
     }
 }

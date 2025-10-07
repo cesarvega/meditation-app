@@ -14,6 +14,7 @@ enum CategoryType: String, CaseIterable {
     case anxiety
     case focus
     case gratitude
+    case meditationMusic
     
     var icon: String {
         switch self {
@@ -23,6 +24,7 @@ enum CategoryType: String, CaseIterable {
         case .anxiety: return "leaf.fill"
         case .focus: return "brain.head.profile"
         case .gratitude: return "sparkles"
+        case .meditationMusic: return "music.note.list"
         }
     }
     
@@ -34,6 +36,7 @@ enum CategoryType: String, CaseIterable {
         case .anxiety: return .green
         case .focus: return .orange
         case .gratitude: return .yellow
+        case .meditationMusic: return .purple
         }
     }
     
@@ -45,6 +48,7 @@ enum CategoryType: String, CaseIterable {
         case .anxiety: return .categoryAnxiety
         case .focus: return .categoryFocus
         case .gratitude: return .categoryGratitude
+        case .meditationMusic: return .categoryMeditationMusic
         }
     }
     
@@ -56,6 +60,7 @@ enum CategoryType: String, CaseIterable {
         case .anxiety: return .descAnxiety
         case .focus: return .descFocus
         case .gratitude: return .descGratitude
+        case .meditationMusic: return .descMeditationMusic
         }
     }
 }

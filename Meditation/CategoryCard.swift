@@ -10,6 +10,11 @@ import SwiftUI
 struct CategoryCard: View {
     let category: Category
     let languageManager: LanguageManager
+    let meditationCount: Int
+
+    private var countLabel: String {
+        meditationCount > 0 ? "1 to \(meditationCount)" : "0"
+    }
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -27,7 +32,7 @@ struct CategoryCard: View {
 
                 Spacer()
 
-                Text("1 to 10")
+                Text(countLabel)
                     .font(.subheadline)
                     .foregroundColor(.gray)
             }
@@ -64,10 +69,6 @@ struct CategoryCard: View {
                         .fontWeight(.semibold)
                         .foregroundColor(.primary)
                         .lineLimit(2)
-                    
-                    Text("Today 8.00 PM")
-                        .font(.subheadline)
-                        .foregroundColor(.gray)
                 }
                 
                 Spacer()
@@ -92,8 +93,8 @@ struct CategoryCard_Previews: PreviewProvider {
                 .ignoresSafeArea()
             
             VStack {
-                CategoryCard(category: Category.allCategories[0], languageManager: LanguageManager())
-                CategoryCard(category: Category.allCategories[1], languageManager: LanguageManager())
+                CategoryCard(category: Category.allCategories[0], languageManager: LanguageManager(), meditationCount: 3)
+                CategoryCard(category: Category.allCategories[1], languageManager: LanguageManager(), meditationCount: 1)
             }
         }
     }

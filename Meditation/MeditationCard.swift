@@ -15,13 +15,7 @@ struct MeditationCard: View {
     let favoritesManager: FavoritesManager
     
     var body: some View {
-        NavigationLink(destination: AudioPlayerView(
-            meditation: meditation,
-            categoryColor: categoryColor,
-            languageManager: languageManager,
-            themeManager: themeManager,
-            favoritesManager: favoritesManager
-        )) {
+        NavigationLink(value: meditation) {
             HStack(spacing: 16) {
                 // Audio art image with rounded corners
                 Image(meditation.imageName)

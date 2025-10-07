@@ -7,8 +7,7 @@
 
 import Foundation
 
-struct Meditation: Identifiable {
-    let id = UUID()
+struct Meditation: Identifiable, Hashable {
     let uniqueId: String // For favorites persistence
     let titleEN: String
     let titleES: String
@@ -47,6 +46,16 @@ struct Meditation: Identifiable {
         self.reviewsCount = reviewsCount
     }
     
+    var id: String { uniqueId }
+
+    static func == (lhs: Meditation, rhs: Meditation) -> Bool {
+        lhs.uniqueId == rhs.uniqueId
+    }
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(uniqueId)
+    }
+    
     func title(languageManager: LanguageManager) -> String {
         languageManager.currentLanguage == .spanish ? titleES : titleEN
     }
@@ -68,6 +77,7 @@ struct Meditation: Identifiable {
         case .anxiety: categoryFolder = "anxiety"
         case .focus: categoryFolder = "focus"
         case .gratitude: categoryFolder = "gratitude"
+        case .meditationMusic: categoryFolder = "background-sound"
         }
         return "resources/audio/meditations/\(categoryFolder)/\(audioFile(languageManager: languageManager))"
     }
@@ -246,6 +256,57 @@ struct Meditation: Identifiable {
                     rating: 4.8
                 )
             ]
+        case .meditationMusic:
+            let tracks = [
+                "Celestial_Whispers",
+                "Cosmic_Journey",
+                "Ethereal_Waves",
+                "Heavenly_Breeze",
+                "Luminous_Dreams",
+                "Peaceful_Cosmos",
+                "Serene_Galaxy",
+                "Starlight_Meditation",
+                "Tranquil_Skies"
+            ]
+            let spanishTitles: [String: String] = [
+                "Celestial_Whispers": "Susurros Celestiales",
+                "Cosmic_Journey": "Viaje Cósmico",
+                "Ethereal_Waves": "Olas Etéreas",
+                "Heavenly_Breeze": "Brisa Celestial",
+                "Luminous_Dreams": "Sueños Luminosos",
+                "Peaceful_Cosmos": "Cosmos en Calma",
+                "Serene_Galaxy": "Galaxia Serena",
+                "Starlight_Meditation": "Meditación de Luz Estelar",
+                "Tranquil_Skies": "Cielos Tranquilos"
+            ]
+            let audioArtImages = [
+                "audio-art-1",
+                "audio-art-10", // ensure the second track has a distinct artwork
+                "audio-art-3",
+                "audio-art-4",
+                "audio-art-5",
+                "audio-art-6",
+                "audio-art-7",
+                "audio-art-8",
+                "audio-art-9"
+            ]
+            return tracks.enumerated().map { (index, track) in
+                let displayName = track.replacingOccurrences(of: "_", with: " ")
+                let spanishName = spanishTitles[track] ?? displayName
+                let imageName = audioArtImages[index % audioArtImages.count]
+                return Meditation(
+                    uniqueId: "bg-\(track.lowercased())",
+                    titleEN: displayName,
+                    titleES: spanishName,
+                    descriptionEN: "Ambient background music to accompany your meditation sessions.",
+                    descriptionES: "Música ambiental para acompañar tus sesiones de meditación.",
+                    imageName: imageName,
+                    audioFileEN: "\(track).mp3",
+                    audioFileES: "\(track).mp3",
+                    category: .meditationMusic,
+                    rating: 4.6
+                )
+            }
         }
     }
     

@@ -55,6 +55,17 @@
 - `grateful-heart-en.mp3` (usado por las tres meditaciones en inglés)
 - `grateful-heart-es.mp3` (usado por las tres meditaciones en español)
 
+### Meditation Music Category ✅
+- `Celestial_Whispers.mp3`
+- `Cosmic_Journey.mp3`
+- `Ethereal_Waves.mp3`
+- `Heavenly_Breeze.mp3`
+- `Luminous_Dreams.mp3`
+- `Peaceful_Cosmos.mp3`
+- `Serene_Galaxy.mp3`
+- `Starlight_Meditation.mp3`
+- `Tranquil_Skies.mp3`
+
 ## Adding More Audio Files
 
 La aplicación espera encontrar los siguientes nombres dentro de cada carpeta:
@@ -64,6 +75,7 @@ La aplicación espera encontrar los siguientes nombres dentro de cada carpeta:
 - **Anxiety**: `calm-in-the-storm-en.mp3`, `calm-in-the-storm-es.mp3`, `ground-and-breathe-en.mp3`, `ground-and-breathe-es.mp3`, `soft-heart-steady-mind-en.mp3`, `soft-heart-steady-mind-es.mp3`
 - **Focus**: `clear-the-fog-en.mp3`, `clear-the-fog-es.mp3`
 - **Gratitude**: `grateful-heart-en.mp3`, `grateful-heart-es.mp3` *(compartidos por las tres meditaciones)*
+- **Meditation Music**: pistas en `resources/audio/background-sound` (mismos nombres que en la lista anterior)
 
 Si añades grabaciones diferentes con otros nombres, actualiza las referencias en `Meditation.swift` para cada meditación correspondiente.
 

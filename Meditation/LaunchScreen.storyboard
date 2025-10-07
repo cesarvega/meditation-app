@@ -17,16 +17,16 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="loading-screen" translatesAutoresizingMaskIntoConstraints="NO" id="launch-image">
-                                <rect key="frame" x="0.0" y="44" width="414" height="808"/>
+                                <rect key="frame" x="0.0" y="96" width="414" height="732"/>
                             </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="safe-area"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="launch-image" firstAttribute="top" secondItem="safe-area" secondAttribute="top" id="top"/>
-                            <constraint firstItem="launch-image" firstAttribute="leading" secondItem="safe-area" secondAttribute="leading" id="leading"/>
-                            <constraint firstItem="safe-area" firstAttribute="trailing" secondItem="launch-image" secondAttribute="trailing" id="trailing"/>
                             <constraint firstItem="safe-area" firstAttribute="bottom" secondItem="launch-image" secondAttribute="bottom" id="bottom"/>
+                            <constraint firstItem="launch-image" firstAttribute="leading" secondItem="safe-area" secondAttribute="leading" id="leading"/>
+                            <constraint firstItem="launch-image" firstAttribute="top" secondItem="safe-area" secondAttribute="top" id="top"/>
+                            <constraint firstItem="safe-area" firstAttribute="trailing" secondItem="launch-image" secondAttribute="trailing" id="trailing"/>
                         </constraints>
                     </view>
                 </viewController>
@@ -36,7 +36,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="loading-screen" width="1024" height="1024"/>
+        <image name="loading-screen" width="512" height="512"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

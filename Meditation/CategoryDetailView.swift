@@ -22,13 +22,6 @@ struct CategoryDetailView: View {
         }
     }
     
-    private func deleteFavorite(at offsets: IndexSet) {
-        for index in offsets {
-            let meditation = meditations[index]
-            favoritesManager.removeFavorite(meditation.uniqueId)
-        }
-    }
-    
     private func clearAllFavorites() {
         for meditation in meditations {
             favoritesManager.removeFavorite(meditation.uniqueId)
@@ -138,6 +131,15 @@ struct CategoryDetailView: View {
                     }
                 }
             }
+        }
+        .navigationDestination(for: Meditation.self) { meditation in
+            AudioPlayerView(
+                meditation: meditation,
+                categoryColor: category.color,
+                languageManager: languageManager,
+                themeManager: themeManager,
+                favoritesManager: favoritesManager
+            )
         }
         .onAppear {
             let appearance = UINavigationBarAppearance()

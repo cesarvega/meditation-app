@@ -29,13 +29,23 @@ audio/
     ├── focus/
     │   ├── clear-the-fog-en.mp3
     │   └── clear-the-fog-es.mp3
-    └── gratitude/
-        ├── grateful-heart-en.mp3
-        └── grateful-heart-es.mp3
+    ├── gratitude/
+    │   ├── grateful-heart-en.mp3
+    │   └── grateful-heart-es.mp3
+    └── meditation-music/
+        ├── Celestial_Whispers.mp3
+        ├── Cosmic_Journey.mp3
+        ├── Ethereal_Waves.mp3
+        ├── Heavenly_Breeze.mp3
+        ├── Luminous_Dreams.mp3
+        ├── Peaceful_Cosmos.mp3
+        ├── Serene_Galaxy.mp3
+        ├── Starlight_Meditation.mp3
+        └── Tranquil_Skies.mp3
 
 ```
 
-> **Nota:** Actualmente, la categoría Focus utiliza un único par de archivos para su meditación disponible y Gratitude hace lo mismo. Cuando agregues más sesiones, conserva estos nombres o actualízalos en `Meditation.swift`.
+> **Nota:** La categoría Focus utiliza un único par de archivos para su meditación disponible, Gratitude hace lo propio y Meditation Music reutiliza las pistas presentes en `resources/audio/background-sound`. Si agregas nuevas sesiones o reemplazas pistas, conserva los nombres o actualízalos en `Meditation.swift`.
 
 ## File Naming Convention
 
