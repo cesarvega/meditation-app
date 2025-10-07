@@ -13,11 +13,11 @@ struct ContentView: View {
     @State private var themeManager = ThemeManager()
     @State private var favoritesManager = FavoritesManager()
     @State private var showSettings = false
-    @State private var showLogoutAlert = false
     @State private var refreshID = UUID()
+    @State private var navigationPath = NavigationPath()
 
     var body: some View {
-        NavigationStack {
+        NavigationStack(path: $navigationPath) {
             GeometryReader { proxy in
                 let safeTop = proxy.safeAreaInsets.top
                 let adjustedTop = max(safeTop - 106, 0)
@@ -30,6 +30,22 @@ struct ContentView: View {
                         .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
                         .clipped()
                         .ignoresSafeArea(.all)
+
+                    HStack {
+                        Button {
+                            showSettings = true
+                        } label: {
+                            Image(systemName: "gearshape.fill")
+                                .foregroundColor(.white)
+                                .padding(10)
+                                .background(Color.black.opacity(0.25))
+                                .clipShape(Circle())
+                        }
+                        Spacer()
+                    }
+                    .padding(.top, adjustedTop + 12)
+                    .padding(.horizontal, 20)
+                    .zIndex(2)
 
                     VStack(spacing: 2) {
                         Text(languageManager.localizedString(.welcome))
@@ -54,105 +70,35 @@ struct ContentView: View {
                     ScrollView {
                         VStack(spacing: 16) {
                             ForEach(Category.allCategories) { category in
-                                NavigationLink(destination: CategoryDetailView(category: category, languageManager: languageManager, themeManager: themeManager, favoritesManager: favoritesManager)) {
-                                    CategoryCard(category: category, languageManager: languageManager)
+                                NavigationLink(value: category) {
+                                    CategoryCard(
+                                        category: category,
+                                        languageManager: languageManager,
+                                        meditationCount: meditationCount(for: category)
+                                    )
                                 }
                                 .buttonStyle(PlainButtonStyle())
                             }
                         }
                         .padding(.top, 6)
                         .padding(.bottom, 26)
+                    }
+                    .scrollContentBackground(.hidden)
+                    .padding(.top, adjustedTop + headerHeight)
+                    .zIndex(1)
+                }
             }
-            .scrollContentBackground(.hidden)
-            .padding(.top, adjustedTop + headerHeight)
-            .zIndex(1)
-        }
+            .navigationDestination(for: Category.self) { category in
+                CategoryDetailView(
+                    category: category,
+                    languageManager: languageManager,
+                    themeManager: themeManager,
+                    favoritesManager: favoritesManager
+                )
+            }
         }
         .navigationTitle("")
         .navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button(action: {
-                        showSettings = true
-                    }) {
-                        Image(systemName: "gearshape.fill")
-                            .foregroundColor(.white)
-                    }
-                }
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Menu {
-                        if let user = authManager.currentUser {
-                            HStack {
-                                if let profileImageURL = user.profileImageURL,
-                                   let url = URL(string: profileImageURL) {
-                                    AsyncImage(url: url) { image in
-                                        image
-                                            .resizable()
-                                            .aspectRatio(contentMode: .fill)
-                                    } placeholder: {
-                                        Circle()
-                                            .fill(Color.gray.opacity(0.3))
-                                    }
-                                    .frame(width: 32, height: 32)
-                                    .clipShape(Circle())
-                                } else {
-                                    // Use SF Symbol for demo user
-                                    Image(systemName: "person.circle.fill")
-                                        .font(.title2)
-                                        .foregroundColor(.blue)
-                                        .frame(width: 32, height: 32)
-                                }
-                                
-                                VStack(alignment: .leading) {
-                                    Text(user.name)
-                                        .font(.headline)
-                                    Text(user.email)
-                                        .font(.caption)
-                                        .foregroundColor(.secondary)
-                                }
-                            }
-                            Divider()
-                        }
-                        
-                        Button(action: {
-                            showLogoutAlert = true
-                        }) {
-                            Label("Sign Out", systemImage: "rectangle.portrait.and.arrow.right")
-                        }
-                    } label: {
-                        if let user = authManager.currentUser {
-                            if let profileImageURL = user.profileImageURL,
-                               let url = URL(string: profileImageURL) {
-                                AsyncImage(url: url) { image in
-                                    image
-                                        .resizable()
-                                        .aspectRatio(contentMode: .fill)
-                                } placeholder: {
-                                    Circle()
-                                        .fill(Color.white.opacity(0.3))
-                                }
-                                .frame(width: 32, height: 32)
-                                .clipShape(Circle())
-                                .overlay(
-                                    Circle()
-                                        .stroke(Color.white, lineWidth: 2)
-                                )
-                            } else {
-                                // Use SF Symbol for demo user (no profile image URL)
-                                Image(systemName: "person.circle.fill")
-                                    .foregroundColor(.white)
-                                    .font(.title2)
-                                    .frame(width: 32, height: 32)
-                            }
-                        } else {
-                            // Fallback if no user
-                            Image(systemName: "person.circle.fill")
-                                .foregroundColor(.white)
-                                .font(.title2)
-                        }
-                    }
-                }
-        }
         .toolbarBackground(.clear, for: .navigationBar)
         .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
         .onAppear {
@@ -160,22 +106,46 @@ struct ContentView: View {
             refreshID = UUID()
             NotificationManager.shared.scheduleDailyMeditationNotifications(language: languageManager.currentLanguage)
         }
-        .onChange(of: languageManager.currentLanguage) { newLanguage in
+        .onChange(of: languageManager.currentLanguage) { _, newLanguage in
             NotificationManager.shared.scheduleDailyMeditationNotifications(language: newLanguage)
         }
         .sheet(isPresented: $showSettings) {
             SettingsView(languageManager: languageManager, themeManager: themeManager)
         }
-        .alert("Sign Out", isPresented: $showLogoutAlert) {
-            Button("Cancel", role: .cancel) { }
-                Button("Sign Out", role: .destructive) {
-                    withAnimation(.easeInOut(duration: 0.3)) {
-                        authManager.signOut()
-                    }
-                }
-            } message: {
-                Text("Are you sure you want to sign out?")
+        .onReceive(NotificationCenter.default.publisher(for: .openMeditation)) { notification in
+            if let meditationId = notification.userInfo?["meditation_id"] as? String {
+                handleDeepLink(meditationId: meditationId)
             }
+        }
+    }
+
+    private func handleDeepLink(meditationId: String) {
+        guard let meditation = Meditation.meditation(withId: meditationId) else { return }
+
+        // Find the category for this meditation
+        let category = Category.allCategories.first { $0.type == meditation.category }
+
+        if let category = category {
+            openCategory(category, meditationId: meditationId)
+        }
+    }
+
+    private func openCategory(_ category: Category, meditationId: String? = nil) {
+        var newPath = NavigationPath()
+        newPath.append(category)
+        if let meditationId,
+           let meditation = Meditation.meditation(withId: meditationId) {
+            newPath.append(meditation)
+        }
+        navigationPath = newPath
+    }
+
+    private func meditationCount(for category: Category) -> Int {
+        switch category.type {
+        case .favorites:
+            return Meditation.favoritesMeditations(favoritesManager: favoritesManager).count
+        default:
+            return Meditation.meditations(for: category.type).count
         }
     }
 }

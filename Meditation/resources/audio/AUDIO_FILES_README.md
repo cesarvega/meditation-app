@@ -28,25 +28,31 @@ audio/
     │   └── soft-heart-steady-mind-es.mp3
     ├── focus/
     │   ├── clear-the-fog-en.mp3
-    │   ├── clear-the-fog-es.mp3
-    │   ├── laser-focus-en.mp3
-    │   ├── laser-focus-es.mp3
-    │   ├── present-power-en.mp3
-    │   └── present-power-es.mp3
-    └── gratitude/
-        ├── grateful-heart-en.mp3
-        ├── grateful-heart-es.mp3
-        ├── seeds-of-joy-en.mp3
-        ├── seeds-of-joy-es.mp3
-        ├── circle-of-thanks-en.mp3
-        └── circle-of-thanks-es.mp3
+    │   └── clear-the-fog-es.mp3
+    ├── gratitude/
+    │   ├── grateful-heart-en.mp3
+    │   └── grateful-heart-es.mp3
+    └── meditation-music/
+        ├── Celestial_Whispers.mp3
+        ├── Cosmic_Journey.mp3
+        ├── Ethereal_Waves.mp3
+        ├── Heavenly_Breeze.mp3
+        ├── Luminous_Dreams.mp3
+        ├── Peaceful_Cosmos.mp3
+        ├── Serene_Galaxy.mp3
+        ├── Starlight_Meditation.mp3
+        └── Tranquil_Skies.mp3
+
 ```
+
+> **Nota:** La categoría Focus utiliza un único par de archivos para su meditación disponible, Gratitude hace lo propio y Meditation Music reutiliza las pistas presentes en `resources/audio/background-sound`. Si agregas nuevas sesiones o reemplazas pistas, conserva los nombres o actualízalos en `Meditation.swift`.
 
 ## File Naming Convention
 
 All audio files follow this pattern:
-- **English**: `[meditation-name]-en.mp3`
-- **Spanish**: `[meditation-name]-es.mp3`
+- **English**: `[meditation-name]-en.<ext>`
+- **Spanish**: `[meditation-name]-es.<ext>`
+
 
 ## How It Works
 
@@ -76,7 +82,7 @@ To add a new meditation:
 
 ## Technical Details
 
-- **Format**: MP3
+- **Format**: MP3 y WAV (Focus ES usa WAV por ahora)
 - **Audio Session**: Configured for playback mode
 - **Background Playback**: Supported (will continue playing in background)
 - **Error Handling**: Displays error messages if audio files are missing

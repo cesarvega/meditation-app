@@ -24,27 +24,37 @@ struct User: Codable {
 // MARK: - Authentication Manager
 @MainActor
 class AuthenticationManager: ObservableObject {
-    @Published var isAuthenticated = false
+    @Published var isAuthenticated = true
     @Published var currentUser: User?
     @Published var isLoading = false
     @Published var errorMessage: String?
     
     private let userDefaultsKey = "meditation_app_user"
+    private let guestUser = User(
+        id: "guest-user",
+        email: "guest@meditation.app",
+        name: "Guest"
+    )
     
     // Apple Sign-In: Store nonce for security
     private var currentNonce: String?
     
     init() {
-        loadStoredUser()
+        if !loadStoredUser() {
+            setGuestUser()
+        }
     }
     
     // MARK: - Stored User Management
-    private func loadStoredUser() {
+    @discardableResult
+    private func loadStoredUser() -> Bool {
         if let userData = UserDefaults.standard.data(forKey: userDefaultsKey),
            let user = try? JSONDecoder().decode(User.self, from: userData) {
             self.currentUser = user
             self.isAuthenticated = true
+            return true
         }
+        return false
     }
     
     private func saveUser(_ user: User) {
@@ -55,6 +65,12 @@ class AuthenticationManager: ObservableObject {
     
     private func clearStoredUser() {
         UserDefaults.standard.removeObject(forKey: userDefaultsKey)
+    }
+
+    private func setGuestUser() {
+        currentUser = guestUser
+        isAuthenticated = true
+        saveUser(guestUser)
     }
     
     // MARK: - User Profile Management
@@ -172,9 +188,8 @@ class AuthenticationManager: ObservableObject {
         GIDSignIn.sharedInstance.signOut()
         #endif
         
-        currentUser = nil
-        isAuthenticated = false
         clearStoredUser()
+        setGuestUser()
         errorMessage = nil
     }
     

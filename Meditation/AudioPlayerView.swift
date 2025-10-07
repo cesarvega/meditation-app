@@ -450,6 +450,7 @@ struct AudioPlayerView: View {
             case .anxiety: categoryFolder = "anxiety"
             case .focus: categoryFolder = "focus"
             case .gratitude: categoryFolder = "gratitude"
+            case .meditationMusic: categoryFolder = "background-sound"
             }
             
             audioManager.loadAudio(fileName: audioFileName, categoryFolder: categoryFolder)

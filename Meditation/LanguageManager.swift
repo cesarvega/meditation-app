@@ -87,6 +87,7 @@ enum LocalizationKey {
     case categoryAnxiety
     case categoryFocus
     case categoryGratitude
+    case categoryMeditationMusic
     
     // Category descriptions
     case descFavorites
@@ -95,6 +96,7 @@ enum LocalizationKey {
     case descAnxiety
     case descFocus
     case descGratitude
+    case descMeditationMusic
     
     var english: String {
         switch self {
@@ -110,6 +112,7 @@ enum LocalizationKey {
         case .categoryAnxiety: return "Anxiety"
         case .categoryFocus: return "Focus"
         case .categoryGratitude: return "Gratitude"
+        case .categoryMeditationMusic: return "Meditation Music"
         
         // Descriptions
         case .descFavorites: return "Your favorite meditations"
@@ -118,6 +121,7 @@ enum LocalizationKey {
         case .descAnxiety: return "Calming exercises for peace of mind"
         case .descFocus: return "Improve concentration and mental clarity"
         case .descGratitude: return "Practice mindfulness and appreciation"
+        case .descMeditationMusic: return "Instrumental and ambient tracks for your sessions"
         }
     }
     
@@ -135,6 +139,7 @@ enum LocalizationKey {
         case .categoryAnxiety: return "Ansiedad"
         case .categoryFocus: return "Enfoque"
         case .categoryGratitude: return "Gratitud"
+        case .categoryMeditationMusic: return "Música para Meditar"
         
         // Descriptions
         case .descFavorites: return "Tus meditaciones favoritas"
@@ -143,6 +148,7 @@ enum LocalizationKey {
         case .descAnxiety: return "Ejercicios calmantes para la paz mental"
         case .descFocus: return "Mejora la concentración y claridad mental"
         case .descGratitude: return "Practica la atención plena y el agradecimiento"
+        case .descMeditationMusic: return "Pistas instrumentales y ambientales para tus sesiones"
         }
     }
 }
