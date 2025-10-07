@@ -19,6 +19,33 @@ struct Meditation: Identifiable {
     let audioFileES: String
     let category: CategoryType
     let rating: Double // Rating out of 5 stars (e.g., 4.0, 4.5)
+    let reviewsCount: Int
+
+    init(
+        uniqueId: String,
+        titleEN: String,
+        titleES: String,
+        descriptionEN: String,
+        descriptionES: String,
+        imageName: String,
+        audioFileEN: String,
+        audioFileES: String,
+        category: CategoryType,
+        rating: Double = Meditation.randomRating(),
+        reviewsCount: Int = Meditation.randomReviews()
+    ) {
+        self.uniqueId = uniqueId
+        self.titleEN = titleEN
+        self.titleES = titleES
+        self.descriptionEN = descriptionEN
+        self.descriptionES = descriptionES
+        self.imageName = imageName
+        self.audioFileEN = audioFileEN
+        self.audioFileES = audioFileES
+        self.category = category
+        self.rating = rating
+        self.reviewsCount = reviewsCount
+    }
     
     func title(languageManager: LanguageManager) -> String {
         languageManager.currentLanguage == .spanish ? titleES : titleEN
@@ -43,6 +70,25 @@ struct Meditation: Identifiable {
         case .gratitude: categoryFolder = "gratitude"
         }
         return "resources/audio/meditations/\(categoryFolder)/\(audioFile(languageManager: languageManager))"
+    }
+
+    func reviewsText(languageManager: LanguageManager) -> String {
+        let value = Double(reviewsCount) / 1000
+        let formatted: String
+        if reviewsCount >= 10000 {
+            formatted = String(format: "%.0fK", value)
+        } else {
+            formatted = String(format: "%.1fK", value)
+        }
+        return languageManager.currentLanguage == .spanish ? "\(formatted) reseñas" : "\(formatted) reviews"
+    }
+
+    private static func randomRating() -> Double {
+        return (Double.random(in: 4.0...5.0) * 2).rounded() / 2
+    }
+
+    private static func randomReviews() -> Int {
+        return Int.random(in: 1_200...65_000)
     }
     
     static func meditations(for category: CategoryType) -> [Meditation] {
@@ -69,7 +115,7 @@ struct Meditation: Identifiable {
                     titleES: "Olas del Océano Nocturno",
                     descriptionEN: "A soothing meditation using imagery of the sea to release tension and invite sleep.",
                     descriptionES: "Una meditación relajante usando imágenes del mar para liberar tensión e invitar al sueño.",
-                    imageName: "audio-art-2",
+                    imageName: "audio-art-14",
                     audioFileEN: "night-ocean-waves-en.mp3",
                     audioFileES: "night-ocean-waves-es.mp3",
                     category: .sleep,
@@ -98,8 +144,8 @@ struct Meditation: Identifiable {
                     descriptionEN: "Ease mental tension with gentle breathing and body relaxation.",
                     descriptionES: "Alivia la tensión mental con respiración suave y relajación corporal.",
                     imageName: "audio-art-4",
-                    audioFileEN: "mind-body-eng.mp3",
-                    audioFileES: "mind-body-esp.mp3",
+                    audioFileEN: "unwind-the-mind-en.mp3",
+                    audioFileES: "unwind-the-mind-es.mp3",
                     category: .stressRelief,
                     rating: 4.2
                 ),
@@ -110,8 +156,8 @@ struct Meditation: Identifiable {
                     descriptionEN: "A calming practice to soften stress, letting it dissolve from head to toe.",
                     descriptionES: "Una práctica calmante para suavizar el estrés, dejándolo disolverse de pies a cabeza.",
                     imageName: "audio-art-5",
-                    audioFileEN: "mind-body-eng.mp3",
-                    audioFileES: "mind-body-esp.mp3",
+                    audioFileEN: "melting-the-pressure-en.mp3",
+                    audioFileES: "melting-the-pressure-es.mp3",
                     category: .stressRelief,
                     rating: 4.6
                 ),
@@ -122,8 +168,8 @@ struct Meditation: Identifiable {
                     descriptionEN: "Find your inner stillness by focusing on breath and grounding awareness.",
                     descriptionES: "Encuentra tu quietud interior enfocándote en la respiración y la conciencia.",
                     imageName: "audio-art-6",
-                    audioFileEN: "mind-body-eng.mp3",
-                    audioFileES: "mind-body-esp.mp3",
+                    audioFileEN: "quiet-center-en.mp3",
+                    audioFileES: "quiet-center-es.mp3",
                     category: .stressRelief,
                     rating: 4.3
                 )
@@ -146,7 +192,7 @@ struct Meditation: Identifiable {
                 Meditation(
                     uniqueId: "ground-and-breathe",
                     titleEN: "Ground & Breathe",
-                    titleES: "Enraízate y Respira",
+                    titleES: "Anclar y Respirar",
                     descriptionEN: "A simple practice to steady the mind and reconnect to safety through the breath.",
                     descriptionES: "Una práctica simple para estabilizar la mente y reconectar con la seguridad.",
                     imageName: "audio-art-8",
@@ -158,7 +204,7 @@ struct Meditation: Identifiable {
                 Meditation(
                     uniqueId: "soft-heart-steady-mind",
                     titleEN: "Soft Heart, Steady Mind",
-                    titleES: "Corazón Suave, Mente Firme",
+                    titleES: "Corazón Suave Serena",
                     descriptionEN: "Gentle affirmations to calm racing thoughts and invite peace into the body.",
                     descriptionES: "Afirmaciones suaves para calmar pensamientos acelerados e invitar paz al cuerpo.",
                     imageName: "audio-art-9",
@@ -179,33 +225,9 @@ struct Meditation: Identifiable {
                     descriptionES: "Afila tu atención con respiración consciente y técnicas de visualización.",
                     imageName: "audio-art-10",
                     audioFileEN: "clear-the-fog-en.mp3",
-                    audioFileES: "clear-the-fog-es.mp3",
+                    audioFileES: "clear-the-fog-es.wav",
                     category: .focus,
                     rating: 4.1
-                ),
-                Meditation(
-                    uniqueId: "laser-focus",
-                    titleEN: "Laser Focus",
-                    titleES: "Enfoque Láser",
-                    descriptionEN: "Guide your energy into one point of concentration for productivity and clarity.",
-                    descriptionES: "Guía tu energía en un punto de concentración para productividad y claridad.",
-                    imageName: "audio-art-11",
-                    audioFileEN: "laser-focus-en.mp3",
-                    audioFileES: "laser-focus-es.mp3",
-                    category: .focus,
-                    rating: 4.5
-                ),
-                Meditation(
-                    uniqueId: "present-power",
-                    titleEN: "Present Power",
-                    titleES: "Poder Presente",
-                    descriptionEN: "A short meditation to pull your mind back from distractions and into the task at hand.",
-                    descriptionES: "Una meditación corta para traer tu mente de las distracciones a la tarea presente.",
-                    imageName: "audio-art-12",
-                    audioFileEN: "present-power-en.mp3",
-                    audioFileES: "present-power-es.mp3",
-                    category: .focus,
-                    rating: 4.3
                 )
             ]
             
@@ -222,30 +244,6 @@ struct Meditation: Identifiable {
                     audioFileES: "grateful-heart-es.mp3",
                     category: .gratitude,
                     rating: 4.8
-                ),
-                Meditation(
-                    uniqueId: "seeds-of-joy",
-                    titleEN: "Seeds of Joy",
-                    titleES: "Semillas de Alegría",
-                    descriptionEN: "A meditation to notice life's small blessings and expand your sense of abundance.",
-                    descriptionES: "Una meditación para notar las pequeñas bendiciones y expandir tu sentido de abundancia.",
-                    imageName: "audio-art-14",
-                    audioFileEN: "seeds-of-joy-en.mp3",
-                    audioFileES: "seeds-of-joy-es.mp3",
-                    category: .gratitude,
-                    rating: 4.6
-                ),
-                Meditation(
-                    uniqueId: "circle-of-thanks",
-                    titleEN: "Circle of Thanks",
-                    titleES: "Círculo de Gratitud",
-                    descriptionEN: "Extend gratitude outward—to people, experiences, and the world around you.",
-                    descriptionES: "Extiende gratitud hacia afuera—a personas, experiencias y el mundo que te rodea.",
-                    imageName: "audio-art-15",
-                    audioFileEN: "circle-of-thanks-en.mp3",
-                    audioFileES: "circle-of-thanks-es.mp3",
-                    category: .gratitude,
-                    rating: 4.7
                 )
             ]
         }

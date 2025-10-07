@@ -60,9 +60,17 @@ enum CategoryType: String, CaseIterable {
     }
 }
 
-struct Category: Identifiable {
+struct Category: Identifiable, Hashable {
     let id = UUID()
     let type: CategoryType
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(type)
+    }
+
+    static func == (lhs: Category, rhs: Category) -> Bool {
+        lhs.type == rhs.type
+    }
     
     func name(languageManager: LanguageManager) -> String {
         languageManager.localizedString(type.nameKey)

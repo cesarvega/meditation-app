@@ -11,11 +11,35 @@ import GoogleSignIn
 #endif
 
 import UIKit
+import UserNotifications
 
-class AppDelegate: NSObject, UIApplicationDelegate {
+class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDelegate {
     func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
         return .portrait
     }
+
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
+        UNUserNotificationCenter.current().delegate = self
+        return true
+    }
+
+    // Handle notification when app is in foreground
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        completionHandler([.banner, .sound])
+    }
+
+    // Handle notification tap
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+        let userInfo = response.notification.request.content.userInfo
+        if let meditationId = userInfo["meditation_id"] as? String {
+            NotificationCenter.default.post(name: .openMeditation, object: nil, userInfo: ["meditation_id": meditationId])
+        }
+        completionHandler()
+    }
+}
+
+extension Notification.Name {
+    static let openMeditation = Notification.Name("openMeditation")
 }
 
 @main
@@ -25,17 +49,9 @@ struct MeditationApp: App {
     
     var body: some Scene {
         WindowGroup {
-            Group {
-                if authManager.isAuthenticated {
-                    ContentView()
-                        .environmentObject(authManager)
-                } else {
-                    LoginView()
-                        .environmentObject(authManager)
-                }
-            }
-            .animation(.easeInOut(duration: 0.3), value: authManager.isAuthenticated)
-            .onAppear {
+            ContentView()
+                .environmentObject(authManager)
+                .onAppear {
                 configureGoogleSignIn()
                 NotificationManager.shared.requestAuthorization()
             }

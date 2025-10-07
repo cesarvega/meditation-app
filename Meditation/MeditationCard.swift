@@ -49,7 +49,7 @@ struct MeditationCard: View {
                                 .font(.caption)
                                 .foregroundColor(.yellow)
                         }
-                        Text(languageManager.currentLanguage == .spanish ? "2.3K reseñas" : "2.3K reviews")
+                        Text(meditation.reviewsText(languageManager: languageManager))
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }

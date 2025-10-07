@@ -2,16 +2,16 @@
 
 ## Quick Steps
 
-1. **Place your MP3 files** in the appropriate category folder:
+1. **Place your MP3/WAV files** in the appropriate category folder:
    ```
-   Meditation/audio/meditations/[category]/your-audio-file.mp3
+   Meditation/audio/meditations/[category]/your-audio-file.{mp3|wav}
    ```
 
 2. **Add to Xcode Project**:
    - Open Xcode
    - Right-click on the `audio/meditations/[category]` folder in Xcode
    - Select "Add Files to 'Meditation'..."
-   - Select your MP3 files
+   - Select your audio files
    - ✅ **IMPORTANT**: Check "Copy items if needed"
    - ✅ **IMPORTANT**: Make sure "Add to targets: Meditation" is checked
    - Click "Add"
@@ -23,38 +23,49 @@
 
 ## Current Audio Files
 
-### Stress Relief Category ✅
-- `mind-body-eng.mp3` - English version (READY)
-- `mind-body-esp.mp3` - Spanish version (READY)
+### Sleep Category ✅
+- `peaceful-drift-en.mp3`
+- `peaceful-drift-es.mp3`
+- `night-ocean-waves-en.mp3`
+- `night-ocean-waves-es.mp3`
+- `release-the-day-en.mp3`
+- `release-the-day-es.mp3`
 
-These files are currently used for ALL three stress-relief meditations:
-- Unwind the Mind
-- Melting the Pressure  
-- Quiet Center
+### Stress Relief Category ✅
+- `unwind-the-mind-en.mp3`
+- `unwind-the-mind-es.mp3`
+- `melting-the-pressure-en.mp3`
+- `melting-the-pressure-es.mp3`
+- `quiet-center-en.mp3`
+- `quiet-center-es.mp3`
+
+### Anxiety Category ✅
+- `calm-in-the-storm-en.mp3`
+- `calm-in-the-storm-es.mp3`
+- `ground-and-breathe-en.mp3`
+- `ground-and-breathe-es.mp3`
+- `soft-heart-steady-mind-en.mp3`
+- `soft-heart-steady-mind-es.mp3`
+
+### Focus Category ✅
+- `clear-the-fog-en.mp3`
+- `clear-the-fog-es.wav`
+
+### Gratitude Category ✅ (shared)
+- `grateful-heart-en.mp3` (usado por las tres meditaciones en inglés)
+- `grateful-heart-es.mp3` (usado por las tres meditaciones en español)
 
 ## Adding More Audio Files
 
-For other categories, you need to add MP3 files with these names:
+La aplicación espera encontrar los siguientes nombres dentro de cada carpeta:
 
-### Sleep Category
-- `peaceful-drift-en.mp3` / `peaceful-drift-es.mp3`
-- `night-ocean-waves-en.mp3` / `night-ocean-waves-es.mp3`
-- `release-the-day-en.mp3` / `release-the-day-es.mp3`
+- **Sleep**: `peaceful-drift-en.mp3`, `peaceful-drift-es.mp3`, `night-ocean-waves-en.mp3`, `night-ocean-waves-es.mp3`, `release-the-day-en.mp3`, `release-the-day-es.mp3`
+- **Stress Relief**: `unwind-the-mind-en.mp3`, `unwind-the-mind-es.mp3`, `melting-the-pressure-en.mp3`, `melting-the-pressure-es.mp3`, `quiet-center-en.mp3`, `quiet-center-es.mp3`
+- **Anxiety**: `calm-in-the-storm-en.mp3`, `calm-in-the-storm-es.mp3`, `ground-and-breathe-en.mp3`, `ground-and-breathe-es.mp3`, `soft-heart-steady-mind-en.mp3`, `soft-heart-steady-mind-es.mp3`
+- **Focus**: `clear-the-fog-en.mp3`, `clear-the-fog-es.wav`
+- **Gratitude**: `grateful-heart-en.mp3`, `grateful-heart-es.mp3` *(compartidos por las tres meditaciones)*
 
-### Anxiety Category
-- `calm-in-the-storm-en.mp3` / `calm-in-the-storm-es.mp3`
-- `ground-and-breathe-en.mp3` / `ground-and-breathe-es.mp3`
-- `soft-heart-steady-mind-en.mp3` / `soft-heart-steady-mind-es.mp3`
-
-### Focus Category
-- `clear-the-fog-en.mp3` / `clear-the-fog-es.mp3`
-- `laser-focus-en.mp3` / `laser-focus-es.mp3`
-- `present-power-en.mp3` / `present-power-es.mp3`
-
-### Gratitude Category
-- `grateful-heart-en.mp3` / `grateful-heart-es.mp3`
-- `seeds-of-joy-en.mp3` / `seeds-of-joy-es.mp3`
-- `circle-of-thanks-en.mp3` / `circle-of-thanks-es.mp3`
+Si añades grabaciones diferentes con otros nombres, actualiza las referencias en `Meditation.swift` para cada meditación correspondiente.
 
 ## Troubleshooting
 
@@ -85,5 +96,5 @@ Until you have all audio files:
 
 - Use lowercase with hyphens: `my-meditation-en.mp3`
 - Always include language suffix: `-en` or `-es`
-- Keep the `.mp3` extension
+- Usa `.mp3` o `.wav` según tu mezcla final (el proyecto ya reproduce ambos)
 - Avoid spaces and special characters
