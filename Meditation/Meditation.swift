@@ -225,7 +225,7 @@ struct Meditation: Identifiable {
                     descriptionES: "Afila tu atención con respiración consciente y técnicas de visualización.",
                     imageName: "audio-art-10",
                     audioFileEN: "clear-the-fog-en.mp3",
-                    audioFileES: "clear-the-fog-es.wav",
+                    audioFileES: "clear-the-fog-es.mp3",
                     category: .focus,
                     rating: 4.1
                 )

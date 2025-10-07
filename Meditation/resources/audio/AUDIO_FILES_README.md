@@ -28,7 +28,7 @@ audio/
     │   └── soft-heart-steady-mind-es.mp3
     ├── focus/
     │   ├── clear-the-fog-en.mp3
-    │   └── clear-the-fog-es.wav
+    │   └── clear-the-fog-es.mp3
     └── gratitude/
         ├── grateful-heart-en.mp3
         └── grateful-heart-es.mp3

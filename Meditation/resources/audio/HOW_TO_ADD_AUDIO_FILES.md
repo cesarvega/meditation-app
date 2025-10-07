@@ -49,7 +49,7 @@
 
 ### Focus Category ✅
 - `clear-the-fog-en.mp3`
-- `clear-the-fog-es.wav`
+- `clear-the-fog-es.mp3`
 
 ### Gratitude Category ✅ (shared)
 - `grateful-heart-en.mp3` (usado por las tres meditaciones en inglés)
@@ -62,7 +62,7 @@ La aplicación espera encontrar los siguientes nombres dentro de cada carpeta:
 - **Sleep**: `peaceful-drift-en.mp3`, `peaceful-drift-es.mp3`, `night-ocean-waves-en.mp3`, `night-ocean-waves-es.mp3`, `release-the-day-en.mp3`, `release-the-day-es.mp3`
 - **Stress Relief**: `unwind-the-mind-en.mp3`, `unwind-the-mind-es.mp3`, `melting-the-pressure-en.mp3`, `melting-the-pressure-es.mp3`, `quiet-center-en.mp3`, `quiet-center-es.mp3`
 - **Anxiety**: `calm-in-the-storm-en.mp3`, `calm-in-the-storm-es.mp3`, `ground-and-breathe-en.mp3`, `ground-and-breathe-es.mp3`, `soft-heart-steady-mind-en.mp3`, `soft-heart-steady-mind-es.mp3`
-- **Focus**: `clear-the-fog-en.mp3`, `clear-the-fog-es.wav`
+- **Focus**: `clear-the-fog-en.mp3`, `clear-the-fog-es.mp3`
 - **Gratitude**: `grateful-heart-en.mp3`, `grateful-heart-es.mp3` *(compartidos por las tres meditaciones)*
 
 Si añades grabaciones diferentes con otros nombres, actualiza las referencias en `Meditation.swift` para cada meditación correspondiente.

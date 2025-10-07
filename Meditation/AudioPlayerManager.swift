@@ -261,6 +261,9 @@ class AudioPlayerManager: NSObject, ObservableObject {
     }
     
     func loadBackgroundAudio() {
+        if currentBackgroundTrackIndex == 0 {
+            currentBackgroundTrackIndex = Int.random(in: 0..<backgroundTracks.count)
+        }
         loadBackgroundAudio(at: currentBackgroundTrackIndex)
     }
     
